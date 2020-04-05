@@ -1,5 +1,5 @@
 '''
-DM Project: Rich Gude
+DM Project: Rich Gude, Sam Cohen, Luis Ahumada
 
 '''
 import os
