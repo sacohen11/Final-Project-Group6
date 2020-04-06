@@ -2,56 +2,55 @@
 DM Project: Rich Gude, Sam Cohen, Luis Ahumada
 
 '''
+
+import numpy as np
+import matplotlib.pyplot as plt
+import cv2
 import os
-from zipfile import ZipFile
-import csv
-from PIL import Image
 
-# Extract the Diabetic zip folder in working directory
-if 'dataDia' not in os.listdir():
-    with ZipFile('Diabetic.zip', 'r') as ProjObj1:
-        ProjObj1.extractall()  # If we provide no arguments, the command will extract from the current folder all files
-                          # into the directory.  Since the current folder comes out as a separate folder, 'Diabetic',
-                          # this folder with be our data folder.
-    os.rename('Diabetic', 'dataDia')  # rename created folder to 'data' folder
+cwd = os.getcwd()
+image = cv2.imread(cwd + "/dataNorm/Marked/Normal_marked (1).jpg")
 
-diaFiles = os.listdir('dataDia/Clear')
-print(diaFiles)       # to show csv file names for reference and verify filefolders is drawing correctly
+#EDA
+print(image)
+print(image.shape)
 
-# Extract the Myopia zip folder in working directory
-if 'dataMyo' not in os.listdir():
-    with ZipFile('Myopia.zip', 'r') as ProjObj2:
-        ProjObj2.extractall()  # If we provide no arguments, the command will extract from the current folder all files
-                          # into the directory.  Since the current folder comes out as a separate folder, 'Myopia',
-                          # this folder with be our data folder.
-    os.rename('Myopia', 'dataMyo')  # rename created folder to 'data' folder
+#Preprocessing
+print("Starting images and label pre-processing")
+label_data = []
+images_data = []
 
-myoFiles = os.listdir('dataMyo/Clear')
-#print(file_headers)       # to show csv file names for reference and verify filefolders is drawing correctly
+for subdir, dirs, files in os.walk(cwd):
+    for file in files:
+        if "Clear" in subdir:
+            #Image preprocessing
+            image_path = os.path.join(subdir, file)
+            img = cv2.imread(image_path)
+            img = cv2.resize(img, (400, 400))
+            images_data.append(img)
 
-# Extract the Normal zip folder in working directory
-if 'dataNorm' not in os.listdir():
-    with ZipFile('Normals.zip', 'r') as ProjObj3:
-        ProjObj3.extractall()  # If we provide no arguments, the command will extract from the current folder all files
-                          # into the directory.  Since the current folder comes out as a separate folder, 'Myopia',
-                          # this folder with be our data folder.
-    os.rename('Normals', 'dataNorm')  # rename created folder to 'data' folder
+            #Labels preprocessing
+            # if "dataNorm" in subdir:
+            #     label = "Normal"
+            #     label_data.append(label)
+            # elif "dataMyo" in subdir:
+            #     label = "Myopia"
+            #     label_data.append(label)
+            # elif "dataDia" in subdir:
+            #     label = "Diabetes"
+            #     label_data.append(label)
 
-normFiles = os.listdir('dataNorm/Clear')
-#print(file_headers)       # to show csv file names for reference and verify filefolders is drawing correctly
+            #Labels preprocessing
+            label = (subdir.split("eye-miner/")[1])
+            label = (label.split("/")[0])
+            label_data.append(label)
 
-'''
-for files in file_headers:
-    with open(('dataDia\\Clear\\' + file_headers[i]), 'r') as f:        # append 'data' to the file name to access the data folder
-        reader = csv.DictReader(f)
-'''
-diaImages = []
-myoImages = []
-normImages = []
-for i in range(2):
-    diaImages.append(Image.open('dataDia\\Clear\\' + diaFiles[i]))
-    myoImages.append(Image.open('dataMyo\\Clear\\' + myoFiles[i]))
-    normImages.append(Image.open('dataNorm\\Clear\\' + normFiles[i]))
-diaImages[1].show()
-myoImages[1].show()
-normImages[1].show()
+print("Images and labels successfully preprocessed")
+
+# look at labels and images shape
+label_data = np.array(label_data)
+print("Labels shape:", label_data.shape)
+images_data = np.array(images_data)
+print("Images shape:", images_data.shape)
+
+#304 images of 400x400 pixels, and 3 channels (RGB)

@@ -26,4 +26,4 @@ INDIVIDUALLY (Each participant will:)
 Documentation:
 PIL IMAGE documentation: https://pillow.readthedocs.io/en/3.1.x/reference/Image.html
 
-	
+OpenCv Installation: https://stackoverflow.com/questions/60254766/opencv-giving-an-error-whenever-import-cv2-is-used	
