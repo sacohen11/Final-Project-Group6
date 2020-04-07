@@ -102,7 +102,14 @@
       <option name="project" value="LOCAL" />
       <updated>1586298043313</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="commiting my workfile">
+      <created>1586298438547</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1586298438547</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -130,10 +137,10 @@
       <screen x="0" y="23" width="1280" height="738" />
     </state>
     <state x="335" y="23" key="#sam_dectree/0.23.1280.738@0.23.1280.738" timestamp="1586100685234" />
-    <state x="223" y="23" key="CommitChangelistDialog2" timestamp="1586298042886">
+    <state x="223" y="23" key="CommitChangelistDialog2" timestamp="1586298438305">
       <screen x="0" y="23" width="1280" height="738" />
     </state>
-    <state x="223" y="23" key="CommitChangelistDialog2/0.23.1280.738@0.23.1280.738" timestamp="1586298042886" />
+    <state x="223" y="23" key="CommitChangelistDialog2/0.23.1280.738@0.23.1280.738" timestamp="1586298438305" />
     <state width="619" height="184" key="GridCell.Tab.0.bottom" timestamp="1586297704167">
       <screen x="0" y="23" width="1280" height="738" />
     </state>
@@ -150,10 +157,10 @@
       <screen x="0" y="23" width="1280" height="738" />
     </state>
     <state width="619" height="184" key="GridCell.Tab.0.right/0.23.1280.738@0.23.1280.738" timestamp="1586297704165" />
-    <state x="240" y="120" key="Vcs.Push.Dialog.v2" timestamp="1586298047454">
+    <state x="240" y="120" key="Vcs.Push.Dialog.v2" timestamp="1586298442504">
       <screen x="0" y="23" width="1280" height="738" />
     </state>
-    <state x="240" y="120" key="Vcs.Push.Dialog.v2/0.23.1280.738@0.23.1280.738" timestamp="1586298047454" />
+    <state x="240" y="120" key="Vcs.Push.Dialog.v2/0.23.1280.738@0.23.1280.738" timestamp="1586298442504" />
     <state x="423" y="315" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1586297976852">
       <screen x="0" y="23" width="1280" height="738" />
     </state>
