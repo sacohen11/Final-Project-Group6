@@ -4,6 +4,7 @@
     <list default="true" id="d0e87934-fce8-4859-9b8b-128cadc71eaf" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DMProject.py" beforeDir="false" afterPath="$PROJECT_DIR$/DMProject.py" afterDir="false" />
+
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,7 +93,9 @@
       <option name="project" value="LOCAL" />
       <updated>1586143655002</updated>
     </task>
+
     <option name="localTasksCounter" value="2" />
+
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -112,6 +115,7 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+
     <MESSAGE value="image preprocessing" />
     <option name="LAST_COMMIT_MESSAGE" value="image preprocessing" />
   </component>
@@ -135,9 +139,11 @@
     <state width="1398" height="294" key="GridCell.Tab.0.right" timestamp="1586226332841">
       <screen x="0" y="0" width="1440" height="896" />
     </state>
+
     <state width="1398" height="294" key="GridCell.Tab.0.right/0.0.1440.896@0.0.1440.896" timestamp="1586226332841" />
     <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1586143701990">
       <screen x="0" y="0" width="1440" height="896" />
+
     </state>
     <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.896@0.0.1440.896" timestamp="1586143701990" />
   </component>

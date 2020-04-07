@@ -81,10 +81,10 @@ contours, hierarchy = cv2.findContours(thresh2, cv2.RETR_TREE, cv2.CHAIN_APPROX_
 cv2.drawContours(thresh2, contours, -1, (0,255,0), 3)
 #ret,thresh2 = cv2.threshold(thresh2,127,255,cv2.THRESH_BINARY_INV)
 #img = cv2.Laplacian(img,cv2.CV_64F)
-#edges = cv2.Canny(img,100,200)
+#edges = cv2.Canny(img,100,200)  
 
 #circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1.2,200, minRadius=100,maxRadius=300)
-#print(circles)  
+#print(circles)
 #circles = np.uint16(np.around(circles))
 #for i in circles[0,:]:
     # draw the outer circle
