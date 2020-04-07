@@ -84,7 +84,7 @@ cv2.drawContours(thresh2, contours, -1, (0,255,0), 3)
 #edges = cv2.Canny(img,100,200)
 
 #circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1.2,200, minRadius=100,maxRadius=300)
-#print(circles)
+#print(circles)  
 #circles = np.uint16(np.around(circles))
 #for i in circles[0,:]:
     # draw the outer circle
