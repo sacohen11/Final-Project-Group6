@@ -5,6 +5,8 @@ DM Project: Rich Gude, Sam Cohen, Luis Ahumada
 
 import numpy as np
 from sklearn import preprocessing
+from skimage.transform import rotate
+from skimage.color import rgb2grey
 import matplotlib.pyplot as plt
 import cv2
 import os
@@ -26,15 +28,39 @@ for subdir, dirs, files in os.walk(cwd):
             img = cv2.imread(image_path)
             img = cv2.resize(img, (400, 400))
 
+            # convert images to greyscale
+            #img = rgb2grey(img)
+
             #cropping the images
-            #img = img[0:395, 0:400]
+            #img = img[150:250, 150:250]
 
             images_data.append(img)
+
+            # #flipping
+            # img = np.fliplr(img)
+
+            # #duplicating new group
+            # images_data.append(img)
+
+            # cropping the images
+            # img = img[150:250, 150:250]
+
+            # # rotate
+            # img = rotate(img, angle=45)
+            #
+            # images_data.append(img)
+
 
             #Labels preprocessing
             label = (subdir.split("eye-miner/")[1])
             label = (label.split("/")[0])
             label_data.append(label)
+
+            # #new labels duplicated group
+            # label_data.append(label)
+            #
+            # # new labels duplicated group
+            # label_data.append(label)
 
 print("Images and labels successfully preprocessed!")
 print("")
@@ -73,16 +99,27 @@ x, y = np.load("x_train.npy"), np.load("y_train.npy")
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, random_state = 40, test_size = 0.2, stratify = y)
 
-
-#Create a svm Classifier
-clf = svm.SVC(kernel="linear", gamma=0.1) #decision_function_shape='ovo'
-
 # Preprocessing: reshape the image data into rows
 x_train = np.reshape(x_train, (x_train.shape[0], -1))
 print('Training data shape: ', x_train.shape)
 
 x_test = np.reshape(x_test, (x_test.shape[0], -1))
 print('Test data shape: ', x_test.shape)
+
+
+from sklearn.preprocessing import StandardScaler
+sc_X = StandardScaler()
+x_train = sc_X.fit_transform(x_train)
+x_test = sc_X.transform(x_test)
+
+#Create a svm Classifier
+
+# clf = svm.SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0,
+#   decision_function_shape='ovr', degree=3, gamma=0.01, kernel='rbf',
+#   max_iter=-1, probability=False, random_state=None, shrinking=True,
+#   tol=0.001, verbose=False)
+
+clf = svm.SVC(kernel="linear") #, decision_function_shape='ovo')
 
 #Train the model using the training sets
 clf.fit(x_train, y_train)
