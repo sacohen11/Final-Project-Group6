@@ -78,10 +78,17 @@ plt.show()
 #img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 ret,thresh2 = cv2.threshold(img,70,255,cv2.THRESH_BINARY_INV)
 contours, hierarchy = cv2.findContours(thresh2, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-cv2.drawContours(thresh2, contours, -1, (0,255,0), 3)
+# find the biggest countour (c) by the area
+c = max(contours, key=cv2.contourArea)
+x, y, w, h = cv2.boundingRect(c)
+
+# draw the biggest contour (c) in green
+cv2.drawContours(thresh2, [c], 0, (0,255,0), 3)
+#cv2.rectangle(thresh2, (x, y), (x + w, y + h), (0, 255, 0), 2)
+#cv2.drawContours(thresh2, contours, -1, (0,255,0), 3)
 #ret,thresh2 = cv2.threshold(thresh2,127,255,cv2.THRESH_BINARY_INV)
 #img = cv2.Laplacian(img,cv2.CV_64F)
-#edges = cv2.Canny(img,100,200)  
+#edges = cv2.Canny(img,100,200)
 
 #circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1.2,200, minRadius=100,maxRadius=300)
 #print(circles)
