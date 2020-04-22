@@ -78,7 +78,7 @@ for subdir, dirs, files in os.walk(cwd):
             image_path = os.path.join(subdir, file)
             img = cv2.imread(image_path)
             img = image_resize(img, height=100)
-            img = []
+            img = img[0:95, :]
             images_data.append(img)
 
             #Labels preprocessing
@@ -128,12 +128,12 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, random_state = 40, tes
 #data augmentation
 a = np.random.randint(0,150)
 b = np.random.randint(150,300)
-print(a,b)
+# print(a,b)
 
 x_train2 = []
 for i in x_train[a:b]:
       # i = np.fliplr(i)
-      i = sp_noise(i, 0.05)
+      # i = sp_noise(i, 0.05)
       # rows, cols = i.shape[:2]
       # M = cv2.getRotationMatrix2D((cols / 2, rows / 2), 90, 1)
       # i = cv2.warpAffine(i, M, (cols, rows))
