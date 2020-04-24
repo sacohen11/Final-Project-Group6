@@ -109,6 +109,7 @@ print('Unique classes:',le.classes_)
 
 #Save the images and labels
 np.save("x_train.npy", images_data)
+np.save("x_train.npy", images_data)
 np.save("y_train.npy", integer_labels)
 
 print("")
@@ -121,29 +122,57 @@ from sklearn.metrics import classification_report,confusion_matrix
 
 x, y = np.load("x_train.npy"), np.load("y_train.npy")
 
-print(x)
+plt.imshow(x[220])
+plt.show()
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, random_state = 40, test_size = 0.20, stratify = y)
 
-#data augmentation
-a = np.random.randint(0,150)
-b = np.random.randint(150,300)
-# print(a,b)
 
-x_train2 = []
-for i in x_train[a:b]:
-      # i = np.fliplr(i)
-      # i = sp_noise(i, 0.05)
-      # rows, cols = i.shape[:2]
-      # M = cv2.getRotationMatrix2D((cols / 2, rows / 2), 90, 1)
-      # i = cv2.warpAffine(i, M, (cols, rows))
-      x_train2.append(i)
+unique, count= np.unique(y_train, return_counts=True)
+print("Training set:")
+print("Diabetes:", count[0])
+print("Myopia:", count[1])
+print("Normal:", count[2])
+print("Total:", len(x_train))
+print("-"*50)
 
-x_train2 = np.array(x_train2)
-x_train[a:b] = x_train2
+print("Data Augmentation...")
 
-plt.imshow(x_train[150])
-plt.show()
+
+x_train_new = []
+y_train_new = []
+
+count = 0
+for i in range(len(x_train)):
+    if y_train[i] == 2:
+        for k in x_train:
+            if count < 17:
+                    # k = np.fliplr(k)
+                    # k = sp_noise(k, 0.05)
+                    rows, cols = k.shape[:2]
+                    M = cv2.getRotationMatrix2D((cols / 2, rows / 2), 90, 1)
+                    k = cv2.warpAffine(k, M, (cols, rows))
+                    x_train_new.append(k)
+                    y_train_new.append(2)
+                    count += 1
+            else:
+                break
+
+x_train_new = np.array(x_train_new)
+x_train = np.concatenate((x_train, x_train_new))
+
+y_train_new = np.array(y_train_new)
+y_train = np.concatenate((y_train, y_train_new))
+print("-"*50)
+
+unique, count= np.unique(y_train, return_counts=True)
+print("Training set after data augmentation:")
+print("Diabetes:", count[0])
+print("Myopia:", count[1])
+print("Normal:", count[2])
+print("Total:", len(x_train))
+print("-"*50)
+
 
 # Preprocessing: reshape the image data into rows
 x_train = np.reshape(x_train, (x_train.shape[0], -1))
@@ -200,6 +229,27 @@ print("-"*50)
 print("Classification Report")
 cfrp = classification_report(y_test, y_pred)
 print(cfrp)
+
+import pandas as pd
+import seaborn as sns
+conf_matrix = confusion_matrix(y_test, y_pred)
+class_names = np.unique(label_data)
+
+df_cm = pd.DataFrame(conf_matrix, index=class_names, columns=class_names )
+plt.figure(figsize=(6,6))
+hm = sns.heatmap(df_cm, cmap="Blues", cbar=False,annot=True, square=True, fmt='d', annot_kws={'size': 20}, yticklabels=df_cm.columns, xticklabels=df_cm.columns)
+hm.yaxis.set_ticklabels(hm.yaxis.get_ticklabels(), rotation=0, ha='right', fontsize=10)
+hm.xaxis.set_ticklabels(hm.xaxis.get_ticklabels(), rotation=0, ha='right', fontsize=10)
+plt.ylabel('True label',fontsize=15)
+plt.xlabel('Predicted label',fontsize=15)
+# Show heat map
+plt.tight_layout()
+plt.show()
+
+
+
+
+
 
 
 
