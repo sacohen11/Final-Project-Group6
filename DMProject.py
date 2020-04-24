@@ -76,7 +76,7 @@ for subdir, dirs, files in os.walk(cwd):
         if "Clear" in subdir:
             #Image preprocessing
             image_path = os.path.join(subdir, file)
-            img = cv2.imread(image_path)
+            img = cv2.imread(image_path,0)
             img = image_resize(img, height=100)
             img = img[0:95, :]
             images_data.append(img)
@@ -220,6 +220,9 @@ print("Accuracy:", round(metrics.accuracy_score(y_test, y_pred), 3))
 print("")
 
 print("-"*50)
+
+
+
 #Confusion Matrix
 print("Confusion Matrix")
 cmx = confusion_matrix(y_test, y_pred)
@@ -247,47 +250,88 @@ plt.tight_layout()
 plt.show()
 
 
-
-
-
-
-
-
 #Cross Validation Score
+# from sklearn.model_selection import cross_val_score
+# print("-"*50)
+# print("Cross Validation Score")
+# accuracies = cross_val_score(estimator = svm.NuSVC(kernel="linear"), X = x_train, y = y_train, cv = 10)
+# print(accuracies)
+#
+# print("Mean of Accuracies")
+# print(accuracies.mean())
+#
+# print("STD of Accuracies")
+# print(accuracies.std())
+
+
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neighbors import NearestNeighbors
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report
+
+
+# Perform KNN of X variables
+knn = KNeighborsClassifier(n_neighbors=23)      # Standard Euclidean distance metric
+
+knn.fit(x_train, y_train)
+
+y_pred_knn = knn.predict(x_test)
+
+
+# calculate metrics
+
+print("\n")
+print("Classification Report: ")
+print(classification_report(y_test,y_pred_knn))
+print("\n")
+
+
+print("Accuracy : ", accuracy_score(y_test, y_pred_knn) * 100)
+print("\n")
+
+
+
+conf_matrix_knn = confusion_matrix(y_test, y_pred_knn)
+class_names = np.unique(label_data)
+
+df_knn = pd.DataFrame(conf_matrix_knn, index=class_names, columns=class_names )
+plt.figure(figsize=(6,6))
+hm = sns.heatmap(df_knn, cmap="Blues", cbar=False,annot=True, square=True, fmt='d', annot_kws={'size': 20}, yticklabels=df_knn.columns, xticklabels=df_knn.columns)
+hm.yaxis.set_ticklabels(hm.yaxis.get_ticklabels(), rotation=0, ha='right', fontsize=10)
+hm.xaxis.set_ticklabels(hm.xaxis.get_ticklabels(), rotation=0, ha='right', fontsize=10)
+plt.ylabel('True label',fontsize=15)
+plt.xlabel('Predicted label',fontsize=15)
+# Show heat map
+plt.tight_layout()
+plt.show()
+
+from sklearn.neighbors import kneighbors_graph
+A = kneighbors_graph(x_train, 2, mode='connectivity', include_self=True)
+print(A)
+
 from sklearn.model_selection import cross_val_score
-print("-"*50)
-print("Cross Validation Score")
-accuracies = cross_val_score(estimator = svm.NuSVC(kernel="linear"), X = x_train, y = y_train, cv = 10)
-print(accuracies)
-
-print("Mean of Accuracies")
-print(accuracies.mean())
-
-print("STD of Accuracies")
-print(accuracies.std())
+import numpy as np
+#create a new KNN model
+knn_cv = KNeighborsClassifier(n_neighbors=3)
+#train model with cv of 5
+cv_scores = cross_val_score(knn_cv, x_train, y_train, cv=5)
+#print each cv score (accuracy) and average them
+print(cv_scores)
+print("cv_scores mean:{}".format(np.mean(cv_scores)))
 
 
+from sklearn.model_selection import GridSearchCV
+#create new a knn model
+knn2 = KNeighborsClassifier()
+#create a dictionary of all values we want to test for n_neighbors
+param_grid = {"n_neighbors": np.arange(1, 25)}
+#use gridsearch to test all values for n_neighbors
+knn_gscv = GridSearchCV(knn2, param_grid, cv=5)
+#fit model to data
+knn_gscv.fit(x_train, y_train)
 
-#Grid Search (not useful bc we are not changing gamma)
-#
-# from sklearn.model_selection import GridSearchCV
-#
-# #Setting parameters for grid
-# param_grid = {"C": [0.1,1,10,100,1000], "gamma": [0.1,0.3,0.5,0.7,0.9], "kernel":["rbf"]}
-#
-# grid = GridSearchCV(estimator = svm.SVC(), param_grid = param_grid, scoring = "accuracy", refit=True, verbose = 3)
-#
-# #Accuracy Grid
-# print("Accuracy Grid")
-# print(grid.fit(x_train, y_train))
-#
-# #Best parameter from Grid
-# print("Best Parameter")
-# print(grid.best_params_)
-#
-
-
-
+#check top performing n_neighbors value
+print(knn_gscv.best_params_)
 
 
 
