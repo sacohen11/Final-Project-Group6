@@ -4,7 +4,7 @@
     <list default="true" id="d0e87934-fce8-4859-9b8b-128cadc71eaf" name="Default Changelist" comment="">
       <change afterPath="$PROJECT_DIR$/new_try.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sam_dectree.py" beforeDir="false" afterPath="$PROJECT_DIR$/sam_dectree.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DMProject.py" beforeDir="false" afterPath="$PROJECT_DIR$/DMProject.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,9 +143,7 @@
       <updated>1586046021413</updated>
       <workItem from="1586046025404" duration="1294000" />
       <workItem from="1586140596014" duration="10748000" />
-      <workItem from="1586321020147" duration="2539000" />
-      <workItem from="1586902310472" duration="448000" />
-      <workItem from="1587444783137" duration="28708000" />
+      <workItem from="1587516896862" duration="9762000" />
     </task>
     <task id="LOCAL-00001" summary="image preprocessing">
       <created>1586143655002</created>
@@ -161,19 +159,19 @@
       <option name="project" value="LOCAL" />
       <updated>1586226426973</updated>
     </task>
-    <task id="LOCAL-00003" summary="SVM Model&#10;Confusion Matrix">
-      <created>1586812535432</created>
+    <task id="LOCAL-00003" summary="SVM Model&#10;Data Augmentation&#10;Luis">
+      <created>1587516930665</created>
       <option name="number" value="00003" />
       <option name="presentableId" value="LOCAL-00003" />
       <option name="project" value="LOCAL" />
-      <updated>1586812535443</updated>
+      <updated>1587516930665</updated>
     </task>
-    <task id="LOCAL-00004" summary="SVM Model&#10;Confusion Matrix">
-      <created>1586812568423</created>
+    <task id="LOCAL-00004" summary="Data Augmentation&#10;Luis">
+      <created>1587699724255</created>
       <option name="number" value="00004" />
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
-      <updated>1586812568423</updated>
+      <updated>1587699724255</updated>
     </task>
     <option name="localTasksCounter" value="5" />
     <servers />
@@ -197,64 +195,75 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="image preprocessing" />
     <MESSAGE value="SVM Model&#10;Confusion Matrix" />
-    <option name="LAST_COMMIT_MESSAGE" value="SVM Model&#10;Confusion Matrix" />
+    <MESSAGE value="SVM Model&#10;Data Augmentation&#10;Luis" />
+    <MESSAGE value="Data Augmentation&#10;Luis" />
+    <option name="LAST_COMMIT_MESSAGE" value="Data Augmentation&#10;Luis" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="279" y="23" key="CommitChangelistDialog2" timestamp="1586812568127">
-      <screen x="0" y="23" width="1280" height="738" />
+    <state x="442" y="260" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1587693268307">
+      <screen x="0" y="0" width="1440" height="896" />
     </state>
-    <state x="314" y="11" key="CommitChangelistDialog2/0.0.1440.896@0.0.1440.896" timestamp="1586315077878" />
-    <state x="279" y="23" key="CommitChangelistDialog2/0.23.1280.738@0.23.1280.738" timestamp="1586812568127" />
-    <state width="619" height="184" key="GridCell.Tab.0.bottom" timestamp="1587761189370">
-      <screen x="0" y="23" width="1280" height="738" />
+    <state x="442" y="260" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1440.896@0.0.1440.896" timestamp="1587693268307" />
+    <state x="314" y="11" key="CommitChangelistDialog2" timestamp="1587764679067">
+      <screen x="0" y="0" width="1440" height="896" />
     </state>
-    <state width="1398" height="256" key="GridCell.Tab.0.bottom/0.0.1440.896@0.0.1440.896" timestamp="1586314697714" />
-    <state width="619" height="184" key="GridCell.Tab.0.bottom/0.23.1280.738@0.23.1280.738" timestamp="1587761189370" />
-    <state width="1238" height="184" key="GridCell.Tab.0.bottom/0.23.1280.739@0.23.1280.739" timestamp="1586388035545" />
-    <state width="619" height="184" key="GridCell.Tab.0.center" timestamp="1587761189364">
-      <screen x="0" y="23" width="1280" height="738" />
+    <state x="314" y="11" key="CommitChangelistDialog2/0.0.1440.896@0.0.1440.896" timestamp="1587764679067" />
+    <state width="1398" height="204" key="GridCell.Tab.0.bottom" timestamp="1587764645305">
+      <screen x="0" y="0" width="1440" height="896" />
     </state>
-    <state width="1398" height="256" key="GridCell.Tab.0.center/0.0.1440.896@0.0.1440.896" timestamp="1586314697712" />
-    <state width="619" height="184" key="GridCell.Tab.0.center/0.23.1280.738@0.23.1280.738" timestamp="1587761189364" />
-    <state width="1238" height="184" key="GridCell.Tab.0.center/0.23.1280.739@0.23.1280.739" timestamp="1586388035543" />
-    <state width="619" height="184" key="GridCell.Tab.0.left" timestamp="1587761189346">
-      <screen x="0" y="23" width="1280" height="738" />
+    <state width="1398" height="204" key="GridCell.Tab.0.bottom/0.0.1440.896@0.0.1440.896" timestamp="1587764645305" />
+    <state width="1398" height="214" key="GridCell.Tab.0.bottom/0.23.1440.873@0.23.1440.873" timestamp="1587699223134" />
+    <state width="1398" height="204" key="GridCell.Tab.0.center" timestamp="1587764645303">
+      <screen x="0" y="0" width="1440" height="896" />
     </state>
-    <state width="1398" height="256" key="GridCell.Tab.0.left/0.0.1440.896@0.0.1440.896" timestamp="1586314697711" />
-    <state width="619" height="184" key="GridCell.Tab.0.left/0.23.1280.738@0.23.1280.738" timestamp="1587761189346" />
-    <state width="1238" height="184" key="GridCell.Tab.0.left/0.23.1280.739@0.23.1280.739" timestamp="1586388035540" />
-    <state width="619" height="184" key="GridCell.Tab.0.right" timestamp="1587761189369">
-      <screen x="0" y="23" width="1280" height="738" />
+    <state width="1398" height="204" key="GridCell.Tab.0.center/0.0.1440.896@0.0.1440.896" timestamp="1587764645303" />
+    <state width="1398" height="214" key="GridCell.Tab.0.center/0.23.1440.873@0.23.1440.873" timestamp="1587699223133" />
+    <state width="1398" height="204" key="GridCell.Tab.0.left" timestamp="1587764645302">
+      <screen x="0" y="0" width="1440" height="896" />
     </state>
-    <state width="1398" height="256" key="GridCell.Tab.0.right/0.0.1440.896@0.0.1440.896" timestamp="1586314697713" />
-    <state width="619" height="184" key="GridCell.Tab.0.right/0.23.1280.738@0.23.1280.738" timestamp="1587761189369" />
-    <state width="1238" height="184" key="GridCell.Tab.0.right/0.23.1280.739@0.23.1280.739" timestamp="1586388035544" />
-    <state x="141" y="30" key="SettingsEditor" timestamp="1586321033821">
-      <screen x="0" y="23" width="1280" height="739" />
+    <state width="1398" height="204" key="GridCell.Tab.0.left/0.0.1440.896@0.0.1440.896" timestamp="1587764645302" />
+    <state width="1398" height="214" key="GridCell.Tab.0.left/0.23.1440.873@0.23.1440.873" timestamp="1587699223132" />
+    <state width="1398" height="204" key="GridCell.Tab.0.right" timestamp="1587764645304">
+      <screen x="0" y="0" width="1440" height="896" />
     </state>
-    <state x="141" y="30" key="SettingsEditor/0.23.1280.739@0.23.1280.739" timestamp="1586321033821" />
+    <state width="1398" height="204" key="GridCell.Tab.0.right/0.0.1440.896@0.0.1440.896" timestamp="1587764645304" />
+    <state width="1398" height="214" key="GridCell.Tab.0.right/0.23.1440.873@0.23.1440.873" timestamp="1587699223134" />
+    <state width="1398" height="231" key="GridCell.Tab.1.bottom" timestamp="1587696476033">
+      <screen x="0" y="0" width="1440" height="896" />
+    </state>
+    <state width="1398" height="231" key="GridCell.Tab.1.bottom/0.0.1440.896@0.0.1440.896" timestamp="1587696476033" />
+    <state width="1398" height="231" key="GridCell.Tab.1.center" timestamp="1587696476032">
+      <screen x="0" y="0" width="1440" height="896" />
+    </state>
+    <state width="1398" height="231" key="GridCell.Tab.1.center/0.0.1440.896@0.0.1440.896" timestamp="1587696476032" />
+    <state width="1398" height="231" key="GridCell.Tab.1.left" timestamp="1587696476031">
+      <screen x="0" y="0" width="1440" height="896" />
+    </state>
+    <state width="1398" height="231" key="GridCell.Tab.1.left/0.0.1440.896@0.0.1440.896" timestamp="1587696476031" />
+    <state width="1398" height="231" key="GridCell.Tab.1.right" timestamp="1587696476033">
+      <screen x="0" y="0" width="1440" height="896" />
+    </state>
+    <state width="1398" height="231" key="GridCell.Tab.1.right/0.0.1440.896@0.0.1440.896" timestamp="1587696476033" />
+
     <state x="482" y="173" key="VCS.ChangeListViewerDialog" timestamp="1586315067432">
       <screen x="0" y="0" width="1440" height="896" />
     </state>
     <state x="482" y="173" key="VCS.ChangeListViewerDialog/0.0.1440.896@0.0.1440.896" timestamp="1586315067432" />
-    <state x="284" y="179" key="Vcs.Push.Dialog.v2" timestamp="1586812571898">
-      <screen x="0" y="23" width="1280" height="738" />
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1587699759703">
+      <screen x="0" y="0" width="1440" height="896" />
     </state>
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.896@0.0.1440.896" timestamp="1586315039320" />
-    <state x="284" y="179" key="Vcs.Push.Dialog.v2/0.23.1280.738@0.23.1280.738" timestamp="1586812571898" />
-    <state x="317" y="224" key="com.intellij.ide.util.TipDialog" timestamp="1587445197149">
-      <screen x="0" y="23" width="1280" height="738" />
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.896@0.0.1440.896" timestamp="1587699759703" />
+    <state x="509" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1587699676564">
+      <screen x="0" y="0" width="1440" height="896" />
     </state>
-    <state x="317" y="224" key="com.intellij.ide.util.TipDialog/0.23.1280.738@0.23.1280.738" timestamp="1587445197149" />
-    <state x="452" y="331" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1586812758441">
-      <screen x="0" y="23" width="1280" height="738" />
+    <state x="509" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.896@0.0.1440.896" timestamp="1587699676564" />
+    <state x="415" y="248" key="git4idea.merge.GitPullDialog" timestamp="1587764628979">
+      <screen x="0" y="0" width="1440" height="896" />
     </state>
-    <state x="509" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.896@0.0.1440.896" timestamp="1586315092788" />
-    <state x="452" y="331" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1280.738@0.23.1280.738" timestamp="1586812758441" />
+    <state x="415" y="248" key="git4idea.merge.GitPullDialog/0.0.1440.896@0.0.1440.896" timestamp="1587764628979" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/eye_miner$new_try.coverage" NAME="new_try Coverage Results" MODIFIED="1587761189333" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/eye_miner$sam_dectree.coverage" NAME="sam_dectree Coverage Results" MODIFIED="1587690504144" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/eye_miner$DMProject.coverage" NAME="DMProject Coverage Results" MODIFIED="1587504579571" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/eye_miner$DMProject.coverage" NAME="DMProject Coverage Results" MODIFIED="1587763745963" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+
   </component>
 </project>
