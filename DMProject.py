@@ -64,6 +64,7 @@ def sp_noise(image,prob):
 
 
 cwd = os.getcwd()
+print(os.getcwd())
 # image = cv2.imread(cwd + "/dataNorm/Marked/Normal_marked (1).jpg")
 
 #Preprocessing
@@ -272,7 +273,11 @@ from sklearn.metrics import classification_report
 
 # Perform KNN of X variables
 knn = KNeighborsClassifier(n_neighbors=23)      # Standard Euclidean distance metric
-
+from sklearn.ensemble import VotingClassifier
+model = VotingClassifier(estimators=[('knn', knn), ('svm', clf)], voting='hard')
+model.fit(x_train,y_train)
+print('INTERETEST AREA BELOW')
+print(model.score(x_test,y_test))
 knn.fit(x_train, y_train)
 
 y_pred_knn = knn.predict(x_test)
