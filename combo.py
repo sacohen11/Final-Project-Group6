@@ -243,7 +243,7 @@ for subdir, dirs, files in os.walk(cwd):
             height, width = img.shape
             img = img[0:width, 0:width]
             # resize the image
-            img_resized = cv2.resize(img, (400, 400))
+            img_resized = cv2.resize(img, (95, 400))
 
             # PREPROCESSING: no Preprocess
             # do nothing but change name
