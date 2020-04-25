@@ -1,6 +1,5 @@
 '''
 DM Project: Rich Gude, Sam Cohen, Luis Ahumada
-
 '''
 
 import numpy as np
@@ -128,7 +127,7 @@ def augment (x_train, y_train, f):
                             plt.show()
 
                         elif rn == 6:
-                            ret, x_train[k] = cv2.threshold(x_train[k], 40, 255, cv2.THRESH_BINARY_INV)   
+                            ret, x_train[k] = cv2.threshold(x_train[k], 40, 255, cv2.THRESH_BINARY_INV)
                             print("Threshold", y_train[k])
                             plt.imshow(x_train[k])
                             plt.show()
