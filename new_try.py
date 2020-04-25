@@ -111,7 +111,8 @@ for subdir, dirs, files in os.walk(cwd):
             # read in image in grayscale
             img = cv2.imread(image_path, 0)
             # crop out the bottom of the image
-            img = img[0:415, 0:435]
+            height, width = img.shape
+            img=img[0:width, 0:width]
             # resize the image
             img_resized = cv2.resize(img, (400, 400))
 
