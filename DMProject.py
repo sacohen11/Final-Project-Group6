@@ -61,6 +61,99 @@ def sp_noise(image,prob):
                 output[i][j] = image[i][j]
     return output
 
+def augment (x_train, y_train, f):
+    unique, count= np.unique(y_train, return_counts=True)
+    print("Training set:")
+    print("Diabetes:", count[0])
+    print("Myopia:", count[1])
+    print("Normal:", count[2])
+    print("Total:", len(x_train))
+    print("-"*50)
+
+    print("Data Augmentation...")
+
+    x_train_new = []
+    y_train_new = []
+
+    print("-"*50)
+    for i in range(len(le.classes_)):
+        if count[i] < f:
+            for k in range(len(x_train)):
+                if count[y_train[k]] < f:
+                        rn = random.randint(0,6)
+                        if rn == 0:
+                            x_train[k] = np.fliplr(x_train[k])
+                            print("Flipped", y_train[k])
+                            plt.imshow(x_train[k])
+                            plt.show()
+
+                        elif rn ==1:
+                            x_train[k] = sp_noise(x_train[k], 0.005)
+                            print("Noised", y_train[k])
+                            plt.imshow(x_train[k])
+                            plt.show()
+
+
+                        elif rn ==2:
+                            rows, cols = x_train[k].shape[:2]
+                            M = cv2.getRotationMatrix2D((cols / 2, rows / 2), 90, 1)
+                            x_train[k] = cv2.warpAffine(x_train[k], M, (cols, rows))
+                            print("Rotated 30", y_train[k])
+                            plt.imshow(x_train[k])
+                            plt.show()
+
+
+                        elif rn == 3:
+                            # shifting the image 100 pixels in both dimensions
+                            rows, cols = x_train[k].shape[:2]
+                            M = np.float32([[1, 0, -5], [0, 1, -5]])
+                            x_train[k] = cv2.warpAffine(x_train[k], M, (cols, rows))
+                            print("Shifted", y_train[k])
+                            plt.imshow(x_train[k])
+                            plt.show()
+
+
+                        elif rn == 4:
+                            rows, cols = x_train[k].shape[:2]
+                            M = cv2.getRotationMatrix2D((cols / 2, rows / 2), 180, 1)
+                            x_train[k] = cv2.warpAffine(x_train[k], M, (cols, rows))
+                            print("Rotated 180", y_train[k])
+                            plt.imshow(x_train[k])
+                            plt.show()
+
+                        elif rn == 5:
+                            x_train[k]= cv2.Canny(x_train[k], 200, 600)
+                            print("Edge Detection", y_train[k])
+                            plt.imshow(x_train[k])
+                            plt.show()
+
+                        elif rn == 6:
+                            ret, x_train[k] = cv2.threshold(x_train[k], 40, 255, cv2.THRESH_BINARY_INV)   
+                            print("Threshold", y_train[k])
+                            plt.imshow(x_train[k])
+                            plt.show()
+
+                        x_train_new.append(x_train[k])
+                        print("New image saved as:", y_train[k])
+                        y_train_new.append(y_train[k])
+                        print("Labeled as:", y_train[k])
+                        count[y_train[k]] += 1
+                        print("-" * 50)
+
+    x_train_new = np.array(x_train_new)
+    x_train = np.concatenate((x_train, x_train_new))
+
+    y_train_new = np.array(y_train_new)
+    y_train = np.concatenate((y_train, y_train_new))
+    print("-"*50)
+
+    unique, count= np.unique(y_train, return_counts=True)
+    print("Training set after data augmentation:")
+    print("Diabetes:", count[0])
+    print("Myopia:", count[1])
+    print("Normal:", count[2])
+    print("Total:", len(x_train))
+    print("-"*50)
 
 
 cwd = os.getcwd()
@@ -77,8 +170,8 @@ for subdir, dirs, files in os.walk(cwd):
             #Image preprocessing
             image_path = os.path.join(subdir, file)
             img = cv2.imread(image_path,0)
-            img = image_resize(img, height=100)
-            img = img[0:95, :]
+            img = image_resize(img, height=400)
+            img = img[0:380, :]
             images_data.append(img)
 
             #Labels preprocessing
@@ -109,7 +202,6 @@ print('Unique classes:',le.classes_)
 
 #Save the images and labels
 np.save("x_train.npy", images_data)
-np.save("x_train.npy", images_data)
 np.save("y_train.npy", integer_labels)
 
 print("")
@@ -122,57 +214,10 @@ from sklearn.metrics import classification_report,confusion_matrix
 
 x, y = np.load("x_train.npy"), np.load("y_train.npy")
 
-plt.imshow(x[220])
-plt.show()
-
 x_train, x_test, y_train, y_test = train_test_split(x, y, random_state = 40, test_size = 0.20, stratify = y)
 
-
-unique, count= np.unique(y_train, return_counts=True)
-print("Training set:")
-print("Diabetes:", count[0])
-print("Myopia:", count[1])
-print("Normal:", count[2])
-print("Total:", len(x_train))
-print("-"*50)
-
-print("Data Augmentation...")
-
-
-x_train_new = []
-y_train_new = []
-
-count = 0
-for i in range(len(x_train)):
-    if y_train[i] == 2:
-        for k in x_train:
-            if count < 17:
-                    # k = np.fliplr(k)
-                    # k = sp_noise(k, 0.05)
-                    rows, cols = k.shape[:2]
-                    M = cv2.getRotationMatrix2D((cols / 2, rows / 2), 90, 1)
-                    k = cv2.warpAffine(k, M, (cols, rows))
-                    x_train_new.append(k)
-                    y_train_new.append(2)
-                    count += 1
-            else:
-                break
-
-x_train_new = np.array(x_train_new)
-x_train = np.concatenate((x_train, x_train_new))
-
-y_train_new = np.array(y_train_new)
-y_train = np.concatenate((y_train, y_train_new))
-print("-"*50)
-
-unique, count= np.unique(y_train, return_counts=True)
-print("Training set after data augmentation:")
-print("Diabetes:", count[0])
-print("Myopia:", count[1])
-print("Normal:", count[2])
-print("Total:", len(x_train))
-print("-"*50)
-
+#Data Augmentation
+augment(x_train, y_train, 90)
 
 # Preprocessing: reshape the image data into rows
 x_train = np.reshape(x_train, (x_train.shape[0], -1))
@@ -222,7 +267,6 @@ print("")
 print("-"*50)
 
 
-
 #Confusion Matrix
 print("Confusion Matrix")
 cmx = confusion_matrix(y_test, y_pred)
@@ -251,17 +295,17 @@ plt.show()
 
 
 #Cross Validation Score
-# from sklearn.model_selection import cross_val_score
-# print("-"*50)
-# print("Cross Validation Score")
-# accuracies = cross_val_score(estimator = svm.NuSVC(kernel="linear"), X = x_train, y = y_train, cv = 10)
-# print(accuracies)
-#
-# print("Mean of Accuracies")
-# print(accuracies.mean())
-#
-# print("STD of Accuracies")
-# print(accuracies.std())
+from sklearn.model_selection import cross_val_score
+print("-"*50)
+print("Cross Validation Score")
+accuracies = cross_val_score(estimator = svm.NuSVC(kernel="linear"), X = x_train, y = y_train, cv = 10)
+print(accuracies)
+
+print("Mean of Accuracies")
+print(accuracies.mean())
+
+print("STD of Accuracies")
+print(accuracies.std())
 
 
 from sklearn.neighbors import KNeighborsClassifier
@@ -271,7 +315,7 @@ from sklearn.metrics import classification_report
 
 
 # Perform KNN of X variables
-knn = KNeighborsClassifier(n_neighbors=23)      # Standard Euclidean distance metric
+knn = KNeighborsClassifier(n_neighbors=16)      # Standard Euclidean distance metric
 
 knn.fit(x_train, y_train)
 
@@ -334,12 +378,49 @@ knn_gscv.fit(x_train, y_train)
 print(knn_gscv.best_params_)
 
 
+from sklearn.tree import DecisionTreeClassifier
+# perform training with entropy.
+# Decision tree with entropy
+clf_entropy = DecisionTreeClassifier(criterion="entropy", random_state=100, max_depth=3, min_samples_leaf=5)
+
+# Performing training
+clf_entropy.fit(x_train, y_train)
+# predicton on test using entropy
+y_pred_entropy = clf_entropy.predict(x_test)
+# calculate metrics entropy model
+print("DATASET USED IS (GET TYPE TO BE TEXT)")
+print("\n")
+print("Results Using Entropy: \n")
+print("Classification Report: ")
+print(classification_report(y_test, y_pred_entropy))
+print("\n")
+print("Accuracy : ", accuracy_score(y_test, y_pred_entropy) * 100)
+print('-' * 80 + '\n')
+print("Confusion Matrix")
+cmx = confusion_matrix(y_test, y_pred_entropy)
+print(cmx)
 
 
 
 
 
 
+
+# count = 0
+# for i in range(len(x_train)):
+#     if y_train[i] == 2:
+#         for k in x_train:
+#             if count < 17:
+#                     # k = np.fliplr(k)
+#                     # k = sp_noise(k, 0.05)
+#                     rows, cols = k.shape[:2]
+#                     M = cv2.getRotationMatrix2D((cols / 2, rows / 2), 90, 1)
+#                     k = cv2.warpAffine(k, M, (cols, rows))
+#                     x_train_new.append(k)
+#                     y_train_new.append(2)
+#                     count += 1
+#             else:
+#                 break
 
 
 
