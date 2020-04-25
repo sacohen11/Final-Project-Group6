@@ -9,11 +9,23 @@ from skimage.color import rgb2grey
 import matplotlib.pyplot as plt
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
-from sklearn.metrics import classification_report
-from sklearn.metrics import confusion_matrix
 import cv2
 import os
 import random
+import warnings
+from sklearn.model_selection import train_test_split
+from sklearn import svm
+from sklearn import metrics
+from sklearn.metrics import classification_report,confusion_matrix
+import pandas as pd
+import seaborn as sns
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neighbors import NearestNeighbors
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report
+warnings.filterwarnings("ignore")
+
+
 
 def mode(array):
     output_array = []
@@ -111,7 +123,6 @@ def augment (x_train, y_train, f):
     print("-"*50)
 
     print("Data Augmentation...")
-
     x_train_new = []
     y_train_new = []
 
@@ -120,7 +131,7 @@ def augment (x_train, y_train, f):
         if count[i] < f:
             for k in range(len(x_train)):
                 if count[y_train[k]] < f:
-                        rn = random.randint(0,6)
+                        rn = random.randint(0,4)
                         if rn == 0:
                             x_train[k] = np.fliplr(x_train[k])
                             print("Flipped", y_train[k])
@@ -161,17 +172,17 @@ def augment (x_train, y_train, f):
                             plt.imshow(x_train[k])
                             plt.show()
 
-                        elif rn == 5:
-                            x_train[k]= cv2.Canny(x_train[k], 200, 600)
-                            print("Edge Detection", y_train[k])
-                            plt.imshow(x_train[k])
-                            plt.show()
-
-                        elif rn == 6:
-                            ret, x_train[k] = cv2.threshold(x_train[k], 40, 255, cv2.THRESH_BINARY_INV)
-                            print("Threshold", y_train[k])
-                            plt.imshow(x_train[k])
-                            plt.show()
+                        # elif rn == 5:
+                        #     x_train[k]= cv2.Canny(x_train[k], 200, 600)
+                        #     print("Edge Detection", y_train[k])
+                        #     plt.imshow(x_train[k])
+                        #     plt.show()
+                        #
+                        # elif rn == 6:
+                        #     ret, x_train[k] = cv2.threshold(x_train[k], 40, 255, cv2.THRESH_BINARY_INV)
+                        #     print("Threshold", y_train[k])
+                        #     plt.imshow(x_train[k])
+                        #     plt.show()
 
                         x_train_new.append(x_train[k])
                         print("New image saved as:", y_train[k])
@@ -185,7 +196,6 @@ def augment (x_train, y_train, f):
 
     y_train_new = np.array(y_train_new)
     y_train = np.concatenate((y_train, y_train_new))
-    print("-"*50)
 
     unique, count= np.unique(y_train, return_counts=True)
     print("Training set after data augmentation:")
@@ -200,7 +210,6 @@ cwd = os.getcwd()
 # image = cv2.imread(cwd + "/dataNorm/Marked/Normal_marked (1).jpg")
 
 #Preprocessing
-print("Starting images and label pre-processing...")
 print("Starting images and label pre-processing...")
 label_data_no_preprocess = []
 images_data_no_preprocess = []
@@ -243,7 +252,7 @@ for subdir, dirs, files in os.walk(cwd):
             height, width = img.shape
             img = img[0:width, 0:width]
             # resize the image
-            img_resized = cv2.resize(img, (400, 400))
+            img_resized = image_resize(img, height=400)
 
             # PREPROCESSING: no Preprocess
             # do nothing but change name
@@ -265,20 +274,20 @@ for subdir, dirs, files in os.walk(cwd):
 
             # PREPROCESSING: contour filled
             # need to do binary inverse threshold first
-            ret, img_contour_filled = cv2.threshold(img_resized, 50, 255, cv2.THRESH_BINARY_INV)
+            # ret, img_contour_filled = cv2.threshold(img_resized, 50, 255, cv2.THRESH_BINARY_INV)
             # finds the contours (curves) in the image
             # selects the maximum contour
             # fills in the area inside the contour
-            contours, hierarchy = cv2.findContours(img_contour_filled, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+            # contours, hierarchy = cv2.findContours(img_contour_filled, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
             # find the biggest countour (c) by the area
-            if len(contours) == 0:
-                # do nothing
-                a = 0;
-            else:
-                c = max(contours, key=cv2.contourArea)
+            # if len(contours) == 0:
+            #     # do nothing
+            #     a = 0;
+            # else:
+            #     c = max(contours, key=cv2.contourArea)
 
             # draw the biggest contour (c) and fill in the inside
-            img_contour_filled = cv2.drawContours(img_contour_filled, [c], 0, (255, 255, 255), thickness=cv2.FILLED)
+            # img_contour_filled = cv2.drawContours(img_contour_filled, [c], 0, (255, 255, 255), thickness=cv2.FILLED)
 
             # plot
             # plt.subplot(122), plt.imshow(img_contour_filled)
@@ -320,22 +329,22 @@ for subdir, dirs, files in os.walk(cwd):
 
             # PREPROCESSING: contour filled cropped
             # need to do binary inverse threshold first
-            ret_cropped, img_contour_filled_cropped = cv2.threshold(img_resized_cropped, 50, 255, cv2.THRESH_BINARY_INV)
+            # ret_cropped, img_contour_filled_cropped = cv2.threshold(img_resized_cropped, 50, 255, cv2.THRESH_BINARY_INV)
             # finds the contours (curves) in the image
             # selects the maximum contour
             # fills in the area inside the contour
-            contours_cropped, hierarchy_cropped = cv2.findContours(img_contour_filled_cropped, cv2.RETR_LIST,
-                                                                   cv2.CHAIN_APPROX_SIMPLE)
+            # contours_cropped, hierarchy_cropped = cv2.findContours(img_contour_filled_cropped, cv2.RETR_LIST,
+            #                                                        cv2.CHAIN_APPROX_SIMPLE)
             # find the biggest countour (c) by the area
-            if len(contours_cropped) == 0:
-                # do nothing
-                b = 0;
-            else:
-                c_cropped = max(contours_cropped, key=cv2.contourArea)
+            # if len(contours_cropped) == 0:
+            #     # do nothing
+            #     b = 0;
+            # else:
+            #     c_cropped = max(contours_cropped, key=cv2.contourArea)
 
             # draw the biggest contour (c) and fill in the inside
-            img_contour_filled_cropped = cv2.drawContours(img_contour_filled_cropped, [c_cropped], 0, (255, 255, 255),
-                                                          thickness=cv2.FILLED)
+            # img_contour_filled_cropped = cv2.drawContours(img_contour_filled_cropped, [c_cropped], 0, (255, 255, 255),
+            #                                               thickness=cv2.FILLED)
 
             # PREPROCESSING: feature creation cropped
             # I took this function from the below website
@@ -364,10 +373,10 @@ for subdir, dirs, files in os.walk(cwd):
             # images_data_fir_filter.append(img_fir_filter)
             images_data_feature_creation.append(img_feature_creation)
             images_data_threshold.append(img_threshold)
-            images_data_contour_filled.append(img_contour_filled)
+            # images_data_contour_filled.append(img_contour_filled)
             images_data_no_preprocess_cropped.append(img_no_preprocess_cropped)
             images_data_threshold_cropped.append(img_threshold_cropped)
-            images_data_contour_filled_cropped.append(img_contour_filled_cropped)
+            # images_data_contour_filled_cropped.append(img_contour_filled_cropped)
             images_data_feature_creation_cropped.append(img_feature_creation_cropped)
 
             # Labels preprocessing
@@ -385,8 +394,6 @@ for subdir, dirs, files in os.walk(cwd):
             images_data_contour_filled_cropped.append(label)
             label_data_feature_creation_cropped.append(label)
 
-print("Images and labels successfully preprocessed!")
-print("")
 print("-"*50)
 
 # look at labels and images shape
@@ -411,6 +418,8 @@ print("Images Contour Filled shape:", images_data_contour_filled.shape)
 images_data_contour_filled_cropped = np.array(images_data_contour_filled_cropped)
 print("Images Contour Filled Cropped shape:", images_data_contour_filled_cropped.shape)
 
+print("")
+
 #304 images of 400x400 pixels, and 3 channels (RGB)
 
 #One-hot encoding: Convert text-based labels to numbers
@@ -418,40 +427,32 @@ le = preprocessing.LabelEncoder()
 le.fit(label_data)
 integer_labels = le.transform(label_data)
 
-
 #Confirm we have 3 unique classes
 print('Unique classes:',le.classes_)
-
-#Save the images and labels
-#np.save("x_train.npy", images_data)
-#np.save("y_train.npy", integer_labels)
-
 print("")
+print("Images and labels successfully preprocessed!")
 print("-"*50)
 
-from sklearn.model_selection import train_test_split
-from sklearn import svm
-from sklearn import metrics
-from sklearn.metrics import classification_report,confusion_matrix
+#Train/Test Split
 
-#x, y = np.load("x_train.npy"), np.load("y_train.npy")
 voting_array = []
 x_test_length = 0;
 y_test_ex = 0;
-types = [images_data_no_preprocess, images_data_edge_detect, images_data_feature_creation, images_data_threshold,
-         images_data_contour_filled, images_data_feature_creation_cropped, images_data_no_preprocess_cropped,
-         images_data_threshold_cropped]
-#types = [images_data_feature_creation, images_data_threshold, images_data_contour_filled,
-         #images_data_feature_creation_cropped, images_data_no_preprocess_cropped, images_data_threshold_cropped]
+#types = [images_data_no_preprocess, images_data_edge_detect, images_data_feature_creation, images_data_threshold,
+         #images_data_contour_filled, images_data_feature_creation_cropped, images_data_no_preprocess_cropped,
+         #images_data_threshold_cropped]
+types = [images_data_no_preprocess, images_data_threshold, images_data_edge_detect, images_data_no_preprocess_cropped, images_data_threshold_cropped, images_data_edge_detect]
+
 for i in types:
     x = i
     y = integer_labels
     x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=40, test_size=0.2, stratify=y)
     x_test_length = len(x_test)
     y_test_ex = y_test
-    # Preprocessing: reshape the image data into rows
+
     # Data Augmentation
     augment(x_train, y_train, 90)
+    print("Data augmentation completed.")
 
     # Preprocessing: reshape the image data into rows
     x_train = np.reshape(x_train, (x_train.shape[0], -1))
@@ -470,50 +471,39 @@ for i in types:
     for i in range(0,3):
         if i == 1:
             # Create a svm Classifier
-            from sklearn.multiclass import OneVsRestClassifier
-            from sklearn.svm import LinearSVC
             from sklearn.svm import NuSVC
-            from sklearn.multiclass import OneVsOneClassifier
-            from sklearn.multiclass import OutputCodeClassifier
 
             # clf = svm.LinearSVC(multi_class="ovr")
-            # clf = svm.SVC(kernel='poly')
-            # clf = svm.SVC(kernel='rbf')
-            # clf = svm.SVC(kernel='linear')
-            # clf = svm.SVC(kernel='sigmoid')
             clf_svm = svm.NuSVC(kernel="linear")
+
             # Train the model using the training sets
             clf_svm.fit(x_train, y_train)
 
             # Predict the response for test dataset
             y_pred = clf_svm.predict(x_test)
             voting_array.append(y_pred)
-            print("")
-            print("-" * 50)
-            print("Model Accuracy:")
+            print("-" * 80)
+            print("-" * 80)
+            print("Model Results")
+            print("-" * 80)
+            print("-" * 80)
+
             # Model Accuracy: how often is the classifier correct?
-            print("Accuracy:", round(metrics.accuracy_score(y_test, y_pred), 3))
-            print("")
-
+            print("Accuracy SVM:", round(metrics.accuracy_score(y_test, y_pred), 3))
             print("-" * 50)
-
             # Confusion Matrix
-            print("Confusion Matrix")
-            cmx = confusion_matrix(y_test, y_pred)
-            print(cmx)
-
+            print("Confusion Matrix SVM:")
+            cmx_SVM = confusion_matrix(y_test, y_pred)
+            print(cmx_SVM)
             print("-" * 50)
-            print("Classification Report")
+            print("Classification Report SVM:")
             cfrp = classification_report(y_test, y_pred)
             print(cfrp)
+            print("-" * 50)
 
-            import pandas as pd
-            import seaborn as sns
-
-            conf_matrix = confusion_matrix(y_test, y_pred)
             class_names = np.unique(label_data)
 
-            df_cm = pd.DataFrame(conf_matrix, index=class_names, columns=class_names)
+            df_cm = pd.DataFrame(cmx_SVM, index=class_names, columns=class_names)
             plt.figure(figsize=(6, 6))
             hm = sns.heatmap(df_cm, cmap="Blues", cbar=False, annot=True, square=True, fmt='d', annot_kws={'size': 20},
                              yticklabels=df_cm.columns, xticklabels=df_cm.columns)
@@ -526,66 +516,87 @@ for i in types:
             plt.show()
 
             # Cross Validation Score
-            from sklearn.model_selection import cross_val_score
+            # from sklearn.model_selection import cross_val_score
+            # print("-" * 50)
+            # print("Cross Validation Score")
+            # accuracies = cross_val_score(estimator=svm.NuSVC(kernel="linear"), X=x_train, y=y_train, cv=10)
+            # print(accuracies)
+            # print("Mean of Accuracies")
+            # print(accuracies.mean())
+            # print("STD of Accuracies")
+            # print(accuracies.std())
 
-            print("-" * 50)
-            print("Cross Validation Score")
-            accuracies = cross_val_score(estimator=svm.NuSVC(kernel="linear"), X=x_train, y=y_train, cv=10)
-            print(accuracies)
-
-            print("Mean of Accuracies")
-            print(accuracies.mean())
-
-            print("STD of Accuracies")
-            print(accuracies.std())
+            print("-" * 80)
+            print("-" * 80)
 
         if i == 1:
-            # perform training with entropy.
             # Decision tree with entropy
-            clf_dt = DecisionTreeClassifier(criterion="entropy", random_state=100, max_depth=3, min_samples_leaf=5)
+            clf_dt = DecisionTreeClassifier(criterion="entropy", random_state=100, max_depth=20, min_samples_leaf=5)
             # Performing training
             clf_dt.fit(x_train, y_train)
-            # predicton on test using entropy
+            X_combined = np.vstack((x_train, x_test))
+            y_combined = np.hstack((y_train, y_test))
+
+            # prediction on test using entropy
             y_pred_dt = clf_dt.predict(x_test)
             voting_array.append(y_pred_dt)
+
             # calculate metrics entropy model
-            print("DATASET USED IS (GET TYPE TO BE TEXT)")
-            print("\n")
-            print("Results Using Entropy: \n")
-            print("Classification Report: ")
+            print("Model Accuracy Tree: ", accuracy_score(y_test, y_pred_dt) * 100)
+            print('-' * 50)
+
+            # confusion matrix for entropy model
+            conf_matrix_dt = confusion_matrix(y_test, y_pred_dt)
+            print("Confusion Matrix Tree:")
+            print(conf_matrix_dt)
+
+            #Clasification report Tree
+            print("Classification Report Tree: ")
             print(classification_report(y_test, y_pred_dt))
-            print("\n")
-            print("Accuracy : ", accuracy_score(y_test, y_pred_dt) * 100)
-            print('-' * 80 + '\n')
-            print("Confusion Matrix")
-            cmx = confusion_matrix(y_test, y_pred_dt)
-            print(cmx)
+            print('-' * 50)
+
+            class_names = np.unique(label_data)
+
+            df_dt = pd.DataFrame(conf_matrix_dt, index=class_names, columns=class_names)
+            plt.figure(figsize=(6, 6))
+            hm = sns.heatmap(df_dt, cmap="Blues", cbar=False, annot=True, square=True, fmt='d', annot_kws={'size': 20},
+                             yticklabels=df_dt.columns, xticklabels=df_dt.columns)
+            hm.yaxis.set_ticklabels(hm.yaxis.get_ticklabels(), rotation=0, ha='right', fontsize=10)
+            hm.xaxis.set_ticklabels(hm.xaxis.get_ticklabels(), rotation=0, ha='right', fontsize=10)
+            plt.ylabel('True label', fontsize=15)
+            plt.xlabel('Predicted label', fontsize=15)
+            # Show heat map
+            plt.tight_layout()
+            plt.show()
+
+            print("-" * 80)
+            print("-" * 80)
+
 
         if i == 2:
-            from sklearn.neighbors import KNeighborsClassifier
-            from sklearn.neighbors import NearestNeighbors
-            from sklearn.metrics import accuracy_score
-            from sklearn.metrics import classification_report
 
             # Perform KNN of X variables
-            knn = KNeighborsClassifier(n_neighbors=16)  # Standard Euclidean distance metric
+            knn = KNeighborsClassifier(n_neighbors=7)  # Standard Euclidean distance metric
 
             knn.fit(x_train, y_train)
 
             y_pred_knn = knn.predict(x_test)
             voting_array.append(y_pred_knn)
 
-            # calculate metrics
+            print("Accuracy KNN: ", accuracy_score(y_test, y_pred_knn) * 100)
+            print('-' * 50)
 
-            print("\n")
+            print("Confusion Matrix KNN:")
+            conf_matrix_knn = confusion_matrix(y_test, y_pred_knn)
+            print(conf_matrix_knn)
+            print('-' * 50)
+
+            # Classification Report KNN
             print("Classification Report: ")
             print(classification_report(y_test, y_pred_knn))
-            print("\n")
+            print('-' * 50)
 
-            print("Accuracy : ", accuracy_score(y_test, y_pred_knn) * 100)
-            print("\n")
 
-            conf_matrix_knn = confusion_matrix(y_test, y_pred_knn)
             class_names = np.unique(label_data)
 
             df_knn = pd.DataFrame(conf_matrix_knn, index=class_names, columns=class_names)
@@ -602,77 +613,51 @@ for i in types:
 
             from sklearn.neighbors import kneighbors_graph
 
-            A = kneighbors_graph(x_train, 2, mode='connectivity', include_self=True)
-            print(A)
+            # A = kneighbors_graph(x_train, 2, mode='connectivity', include_self=True)
+            # print(A)
 
             from sklearn.model_selection import cross_val_score
-            import numpy as np
 
-            # create a new KNN model
-            knn_cv = KNeighborsClassifier(n_neighbors=3)
-            # train model with cv of 5
-            cv_scores = cross_val_score(knn_cv, x_train, y_train, cv=5)
-            # print each cv score (accuracy) and average them
-            print(cv_scores)
-            print("cv_scores mean:{}".format(np.mean(cv_scores)))
+            # # create a new KNN model
+            # knn_cv = KNeighborsClassifier(n_neighbors=3)
+            # # train model with cv of 5
+            # cv_scores = cross_val_score(knn_cv, x_train, y_train, cv=5)
+            # # print each cv score (accuracy) and average them
+            # print(cv_scores)
+            # print("cv_scores mean:{}".format(np.mean(cv_scores)))
 
             from sklearn.model_selection import GridSearchCV
 
-            # create new a knn model
-            knn2 = KNeighborsClassifier()
-            # create a dictionary of all values we want to test for n_neighbors
-            param_grid = {"n_neighbors": np.arange(1, 25)}
-            # use gridsearch to test all values for n_neighbors
-            knn_gscv = GridSearchCV(knn2, param_grid, cv=5)
-            # fit model to data
-            knn_gscv.fit(x_train, y_train)
+            # # create new a knn model
+            # knn2 = KNeighborsClassifier()
+            # # create a dictionary of all values we want to test for n_neighbors
+            # param_grid = {"n_neighbors": np.arange(1, 25)}
+            # # use gridsearch to test all values for n_neighbors
+            # knn_gscv = GridSearchCV(knn2, param_grid, cv=5)
+            # # fit model to data
+            # knn_gscv.fit(x_train, y_train)
+            #
+            # # check top performing n_neighbors value
+            # print(knn_gscv.best_params_)
+            print('-' * 80)
+            print('-' * 80)
+            print('-' * 80 + '\n')
 
-            # check top performing n_neighbors value
-            print(knn_gscv.best_params_)
 
-print(voting_array)
+# print(voting_array)
 final_pred = np.array([])
 final_pred = np.append(final_pred, mode(voting_array))
                            #  , voting_array[1][i], voting_array[2][i],
                                                        # voting_array[3][i], voting_array[4][i], voting_array[5][i],
                                                       #  voting_array[6][i], voting_array[7][i]]))
-print(final_pred)
-print(final_pred[0:60])
-print(final_pred[0:61])
-print("Accuracy : ", accuracy_score(y_test_ex, final_pred[0:61]) * 100)
-print('-' * 80 + '\n')
-print("Confusion Matrix")
-cmx = confusion_matrix(y_test_ex, final_pred[0:61])
+# print(final_pred)
+#print(final_pred[0:60])
+#print(final_pred[0:61])
+print("Accuracy Voting: ", accuracy_score(y_test_ex, final_pred[0:60]) * 100)
+print('-' * 50)
+print("Confusion Matrix Voting:")
+cmx = confusion_matrix(y_test_ex, final_pred[0:60])
 print(cmx)
-
-
-
-
-
-
-
-
-
-
-
-
-
-# count = 0
-# for i in range(len(x_train)):
-#     if y_train[i] == 2:
-#         for k in x_train:
-#             if count < 17:
-#                     # k = np.fliplr(k)
-#                     # k = sp_noise(k, 0.05)
-#                     rows, cols = k.shape[:2]
-#                     M = cv2.getRotationMatrix2D((cols / 2, rows / 2), 90, 1)
-#                     k = cv2.warpAffine(k, M, (cols, rows))
-#                     x_train_new.append(k)
-#                     y_train_new.append(2)
-#                     count += 1
-#             else:
-#                 break
-
 
 
 
