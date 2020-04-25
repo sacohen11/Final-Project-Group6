@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d0e87934-fce8-4859-9b8b-128cadc71eaf" name="Default Changelist" comment="">
+    <list default="true" id="d0e87934-fce8-4859-9b8b-128cadc71eaf" name="Default Changelist" comment="Luis Pat">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -141,7 +141,7 @@
       <updated>1586046021413</updated>
       <workItem from="1586046025404" duration="1294000" />
       <workItem from="1586140596014" duration="10748000" />
-      <workItem from="1587516896862" duration="25714000" />
+      <workItem from="1587516896862" duration="25983000" />
     </task>
     <task id="LOCAL-00001" summary="image preprocessing">
       <created>1586143655002</created>
@@ -199,7 +199,14 @@
       <option name="project" value="LOCAL" />
       <updated>1587839773794</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Luis Pat">
+      <created>1587843488047</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1587843488047</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -236,10 +243,10 @@
       <screen x="0" y="0" width="1440" height="896" />
     </state>
     <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1440.896@0.0.1440.896" timestamp="1587843246367" />
-    <state x="314" y="11" key="CommitChangelistDialog2" timestamp="1587839773635">
+    <state x="314" y="11" key="CommitChangelistDialog2" timestamp="1587843491810">
       <screen x="0" y="0" width="1440" height="896" />
     </state>
-    <state x="314" y="11" key="CommitChangelistDialog2/0.0.1440.896@0.0.1440.896" timestamp="1587839773635" />
+    <state x="314" y="11" key="CommitChangelistDialog2/0.0.1440.896@0.0.1440.896" timestamp="1587843491810" />
     <state width="1398" height="375" key="GridCell.Tab.0.bottom" timestamp="1587843216512">
       <screen x="0" y="0" width="1440" height="896" />
     </state>
