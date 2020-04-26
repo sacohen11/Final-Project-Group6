@@ -219,7 +219,6 @@ label_data_no_preprocess = []
 images_data_no_preprocess = []
 images_data_no_preprocess_cropped = []
 images_data_edge_detect = []
-images_data_fir_filter = []
 images_data_feature_creation = []
 images_data_feature_creation_cropped = []
 images_data_threshold = []
@@ -317,7 +316,6 @@ for subdir, dirs, files in os.walk(cwd):
             # APPENDING IMAGES TO ARRAYS
             images_data_no_preprocess.append(img_no_preprocess)
             images_data_edge_detect.append(img_edge_detect)
-            # images_data_fir_filter.append(img_fir_filter)
             images_data_feature_creation.append(img_feature_creation)
             images_data_threshold.append(img_threshold)
             images_data_no_preprocess_cropped.append(img_no_preprocess_cropped)
@@ -354,8 +352,6 @@ print("Images Threshold Cropped shape:", threshold_cropped.shape)
 
 print("")
 
-#304 images of 400x400 pixels, and 3 channels (RGB)
-
 #One-hot encoding: Convert text-based labels to numbers
 le = preprocessing.LabelEncoder()
 le.fit(label_data)
@@ -375,7 +371,7 @@ y_test_ex = 0;
 #types = [images_data_no_preprocess, images_data_edge_detect, images_data_feature_creation, images_data_threshold,
          #images_data_contour_filled, images_data_feature_creation_cropped, images_data_no_preprocess_cropped,
          #images_data_threshold_cropped]
-types = [no_preprocess, threshold, edge_detect, no_preprocess_cropped, threshold_cropped, feature_creation, feature_creation_cropped]
+types = [no_preprocess,  no_preprocess_cropped, threshold, threshold_cropped, feature_creation, feature_creation_cropped, edge_detect]
 
 for i in types:
     x = i
