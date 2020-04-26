@@ -192,7 +192,7 @@ def augment (x_train, y_train, f):
                         y_train_new.append(y_train[k])
                         # print("Labeled as:", y_train[k])
                         count[y_train[k]] += 1
-                        print("-" * 50)
+                        # print("-" * 50)
 
     x_train_new = np.array(x_train_new)
     x_train = np.concatenate((x_train, x_train_new))
@@ -208,6 +208,8 @@ def augment (x_train, y_train, f):
     print("Total:", len(x_train))
     print("-"*50)
 
+def namestr(obj, namespace):
+    return [name for name in namespace if namespace[name] is obj]
 
 cwd = os.getcwd()
 
@@ -222,8 +224,6 @@ images_data_feature_creation = []
 images_data_feature_creation_cropped = []
 images_data_threshold = []
 images_data_threshold_cropped = []
-images_data_contour_filled = []
-images_data_contour_filled_cropped = []
 label_data_feature_creation_cropped = []
 
 
@@ -258,27 +258,6 @@ for subdir, dirs, files in os.walk(cwd):
             # any pixel above that value will be black, anything below will be white
             ret, img_threshold = cv2.threshold(img_resized, 30, 255, cv2.THRESH_BINARY_INV)
 
-            # PREPROCESSING: contour filled
-            # need to do binary inverse threshold first
-            # ret, img_contour_filled = cv2.threshold(img_resized, 50, 255, cv2.THRESH_BINARY_INV)
-            # finds the contours (curves) in the image
-            # selects the maximum contour
-            # fills in the area inside the contour
-            # contours, hierarchy = cv2.findContours(img_contour_filled, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-            # find the biggest countour (c) by the area
-            # if len(contours) == 0:
-            #     # do nothing
-            #     a = 0;
-            # else:
-            #     c = max(contours, key=cv2.contourArea)
-
-            # draw the biggest contour (c) and fill in the inside
-            # img_contour_filled = cv2.drawContours(img_contour_filled, [c], 0, (255, 255, 255), thickness=cv2.FILLED)
-
-            # plot
-            # plt.subplot(122), plt.imshow(img_contour_filled)
-            # plt.title('Edge Image')
-            # plt.show()
 
             # PREPROCESSING: feature creation
             # I took this function from the below website
@@ -313,24 +292,6 @@ for subdir, dirs, files in os.walk(cwd):
             # PREPROCESSING: threshold cropped
             ret, img_threshold_cropped = cv2.threshold(img_resized_cropped, 30, 255, cv2.THRESH_BINARY_INV)
 
-            # PREPROCESSING: contour filled cropped
-            # need to do binary inverse threshold first
-            # ret_cropped, img_contour_filled_cropped = cv2.threshold(img_resized_cropped, 50, 255, cv2.THRESH_BINARY_INV)
-            # finds the contours (curves) in the image
-            # selects the maximum contour
-            # fills in the area inside the contour
-            # contours_cropped, hierarchy_cropped = cv2.findContours(img_contour_filled_cropped, cv2.RETR_LIST,
-            #                                                        cv2.CHAIN_APPROX_SIMPLE)
-            # find the biggest countour (c) by the area
-            # if len(contours_cropped) == 0:
-            #     # do nothing
-            #     b = 0;
-            # else:
-            #     c_cropped = max(contours_cropped, key=cv2.contourArea)
-
-            # draw the biggest contour (c) and fill in the inside
-            # img_contour_filled_cropped = cv2.drawContours(img_contour_filled_cropped, [c_cropped], 0, (255, 255, 255),
-            #                                               thickness=cv2.FILLED)
 
             # PREPROCESSING: feature creation cropped
             # I took this function from the below website
@@ -359,10 +320,8 @@ for subdir, dirs, files in os.walk(cwd):
             # images_data_fir_filter.append(img_fir_filter)
             images_data_feature_creation.append(img_feature_creation)
             images_data_threshold.append(img_threshold)
-            # images_data_contour_filled.append(img_contour_filled)
             images_data_no_preprocess_cropped.append(img_no_preprocess_cropped)
             images_data_threshold_cropped.append(img_threshold_cropped)
-            # images_data_contour_filled_cropped.append(img_contour_filled_cropped)
             images_data_feature_creation_cropped.append(img_feature_creation_cropped)
 
             # Labels preprocessing
@@ -376,24 +335,22 @@ print("-"*50)
 # look at labels and images shape
 label_data = np.array(label_data_no_preprocess)
 print("Labels shape:", label_data.shape)
-images_data_no_preprocess = np.array(images_data_no_preprocess)
-print("Images No Preprocessing shape:", images_data_no_preprocess.shape)
-images_data_no_preprocess_cropped = np.array(images_data_no_preprocess_cropped)
-print("Images No Preprocessing Cropped shape:", images_data_no_preprocess_cropped.shape)
-images_data_feature_creation = np.array(images_data_feature_creation)
-print("Images Feature Creation shape:", images_data_feature_creation.shape)
-images_data_feature_creation_cropped = np.array(images_data_feature_creation_cropped)
-print("Images Feature Creation Cropped shape:", images_data_feature_creation_cropped.shape)
-images_data_edge_detect = np.array(images_data_edge_detect)
-print("Images Edge Detect shape:", images_data_edge_detect.shape)
-images_data_threshold = np.array(images_data_threshold)
-print("Images Threshold shape:", images_data_threshold.shape)
-images_data_threshold_cropped = np.array(images_data_threshold_cropped)
-print("Images Threshold Cropped shape:", images_data_threshold_cropped.shape)
-images_data_contour_filled = np.array(images_data_contour_filled)
-print("Images Contour Filled shape:", images_data_contour_filled.shape)
-images_data_contour_filled_cropped = np.array(images_data_contour_filled_cropped)
-print("Images Contour Filled Cropped shape:", images_data_contour_filled_cropped.shape)
+no_preprocess = np.array(images_data_no_preprocess)
+print("Images No Preprocessing shape:", no_preprocess.shape)
+no_preprocess_cropped = np.array(images_data_no_preprocess_cropped)
+print("Images No Preprocessing Cropped shape:", no_preprocess_cropped.shape)
+feature_creation = np.array(images_data_feature_creation)
+print("Images Feature Creation shape:", feature_creation.shape)
+feature_creation_cropped = np.array(images_data_feature_creation_cropped)
+print("Images Feature Creation Cropped shape:", feature_creation_cropped.shape)
+edge_detect = np.array(images_data_edge_detect)
+print("Images Edge Detect shape:", edge_detect.shape)
+threshold = np.array(images_data_threshold)
+print("Images Threshold shape:", threshold.shape)
+threshold_cropped = np.array(images_data_threshold_cropped)
+print("Images Threshold Cropped shape:", threshold_cropped.shape)
+
+
 
 print("")
 
@@ -418,7 +375,7 @@ y_test_ex = 0;
 #types = [images_data_no_preprocess, images_data_edge_detect, images_data_feature_creation, images_data_threshold,
          #images_data_contour_filled, images_data_feature_creation_cropped, images_data_no_preprocess_cropped,
          #images_data_threshold_cropped]
-types = [images_data_no_preprocess, images_data_threshold, images_data_edge_detect, images_data_no_preprocess_cropped, images_data_threshold_cropped, images_data_feature_creation, images_data_feature_creation_cropped]
+types = [no_preprocess, threshold, edge_detect, no_preprocess_cropped, threshold_cropped, feature_creation, feature_creation_cropped]
 
 for i in types:
     x = i
@@ -434,10 +391,10 @@ for i in types:
 
     # Preprocessing: reshape the image data into rows
     x_train = np.reshape(x_train, (x_train.shape[0], -1))
-    print('Training data shape: ', x_train.shape)
+    print('Training data shape',namestr(i, globals())[0],":", x_train.shape)
 
     x_test = np.reshape(x_test, (x_test.shape[0], -1))
-    print('Test data shape: ', x_test.shape)
+    print('Test data shape',namestr(i, globals())[0],":", x_test.shape)
 
     # Standardizing the features
     from sklearn.preprocessing import StandardScaler
@@ -459,23 +416,20 @@ for i in types:
     y_pred = clf_svm.predict(x_test)
     voting_array.append(y_pred)
     print("-" * 80)
-    print("-" * 80)
-    print("Model Results")
-    print("-" * 80)
+    print("Model Results", namestr(i, globals())[0],":")
     print("-" * 80)
 
     # Model Accuracy: how often is the classifier correct?
-    print("Accuracy SVM:", round(metrics.accuracy_score(y_test, y_pred), 3))
+    print("Accuracy SVM",namestr(i, globals())[0],":", round(metrics.accuracy_score(y_test, y_pred), 3))
     print("-" * 50)
     # Confusion Matrix
-    print("Confusion Matrix SVM:")
+    print("Confusion Matrix",namestr(i, globals())[0],":")
     cmx_SVM = confusion_matrix(y_test, y_pred)
     print(cmx_SVM)
     print("-" * 50)
-    print("Classification Report SVM:")
+    print("Classification Report SVM",namestr(i, globals())[0],":")
     cfrp = classification_report(y_test, y_pred)
     print(cfrp)
-    print("-" * 50)
 
     class_names = np.unique(label_data)
 
@@ -487,6 +441,7 @@ for i in types:
     hm.xaxis.set_ticklabels(hm.xaxis.get_ticklabels(), rotation=0, ha='right', fontsize=10)
     plt.ylabel('True label', fontsize=15)
     plt.xlabel('Predicted label', fontsize=15)
+    plt.title(("SVM", namestr(i, globals())[0]))
     # Show heat map
     plt.tight_layout()
     plt.show()
@@ -503,7 +458,6 @@ for i in types:
     # print(accuracies.std())
 
     print("-" * 80)
-    print("-" * 80)
 
     # Decision tree with entropy
     clf_dt = DecisionTreeClassifier(criterion="entropy", random_state=100, max_depth=20, min_samples_leaf=5)
@@ -517,18 +471,17 @@ for i in types:
     voting_array.append(y_pred_dt)
 
     # calculate metrics entropy model
-    print("Model Accuracy Tree: ", accuracy_score(y_test, y_pred_dt) * 100)
+    print("Model Accuracy Tree", namestr(i, globals())[0],":", accuracy_score(y_test, y_pred_dt) * 100)
     print('-' * 50)
 
     # confusion matrix for entropy model
     conf_matrix_dt = confusion_matrix(y_test, y_pred_dt)
-    print("Confusion Matrix Tree:")
+    print("Confusion Matrix Tree", namestr(i, globals())[0],":")
     print(conf_matrix_dt)
 
     #Clasification report Tree
-    print("Classification Report Tree: ")
+    print("Classification Report Tree", namestr(i, globals())[0],":")
     print(classification_report(y_test, y_pred_dt))
-    print('-' * 50)
 
     class_names = np.unique(label_data)
 
@@ -540,35 +493,34 @@ for i in types:
     hm.xaxis.set_ticklabels(hm.xaxis.get_ticklabels(), rotation=0, ha='right', fontsize=10)
     plt.ylabel('True label', fontsize=15)
     plt.xlabel('Predicted label', fontsize=15)
+    plt.title(("Tree", namestr(i, globals())[0]))
     # Show heat map
     plt.tight_layout()
     plt.show()
 
     print("-" * 80)
-    print("-" * 80)
 
 
 
     # Perform KNN of X variables
-    knn = KNeighborsClassifier(n_neighbors=7)  # Standard Euclidean distance metric
+    knn = KNeighborsClassifier(n_neighbors=17)  # Standard Euclidean distance metric
 
     knn.fit(x_train, y_train)
 
     y_pred_knn = knn.predict(x_test)
     voting_array.append(y_pred_knn)
 
-    print("Accuracy KNN: ", accuracy_score(y_test, y_pred_knn) * 100)
+    print("Accuracy KNN", namestr(i, globals())[0],":", accuracy_score(y_test, y_pred_knn) * 100)
     print('-' * 50)
 
-    print("Confusion Matrix KNN:")
+    print("Confusion Matrix KNN", namestr(i, globals())[0],":")
     conf_matrix_knn = confusion_matrix(y_test, y_pred_knn)
     print(conf_matrix_knn)
     print('-' * 50)
 
     # Classification Report KNN
-    print("Classification Report: ")
+    print("Classification Report", namestr(i, globals())[0],":")
     print(classification_report(y_test, y_pred_knn))
-    print('-' * 50)
 
 
     class_names = np.unique(label_data)
@@ -581,6 +533,7 @@ for i in types:
     hm.xaxis.set_ticklabels(hm.xaxis.get_ticklabels(), rotation=0, ha='right', fontsize=10)
     plt.ylabel('True label', fontsize=15)
     plt.xlabel('Predicted label', fontsize=15)
+    plt.title(("KNN", namestr(i, globals())[0]))
     # Show heat map
     plt.tight_layout()
     plt.show()
@@ -613,7 +566,6 @@ for i in types:
     #
     # # check top performing n_neighbors value
     # print(knn_gscv.best_params_)
-    print('-' * 80)
     print('-' * 80)
     print('-' * 80 + '\n')
 
