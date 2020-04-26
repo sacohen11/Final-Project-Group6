@@ -58,7 +58,10 @@ def mode(array):
         if doubles > 1:
             if maximum == count0 & maximum == count1:
                 output_array.append(random.randint(0,2))
-            #else:
+            elif maximum == count1 & maximum == count2:
+                output_array.append(random.randint(1, 2))
+            else:
+                output_array.append(random.randrange(0, 2, 2))
                 #output_array.append(2)
         else:
             output_array.append(return_value)
@@ -134,24 +137,24 @@ def augment (x_train, y_train, f):
                         rn = random.randint(0,4)
                         if rn == 0:
                             x_train[k] = np.fliplr(x_train[k])
-                            print("Flipped", y_train[k])
-                            plt.imshow(x_train[k])
-                            plt.show()
+                            # print("Flipped", y_train[k])
+                            # plt.imshow(x_train[k])
+                            # plt.show()
 
                         elif rn ==1:
                             x_train[k] = sp_noise(x_train[k], 0.005)
-                            print("Noised", y_train[k])
-                            plt.imshow(x_train[k])
-                            plt.show()
+                            # print("Noised", y_train[k])
+                            # plt.imshow(x_train[k])
+                            # plt.show()
 
 
                         elif rn ==2:
                             rows, cols = x_train[k].shape[:2]
                             M = cv2.getRotationMatrix2D((cols / 2, rows / 2), 90, 1)
                             x_train[k] = cv2.warpAffine(x_train[k], M, (cols, rows))
-                            print("Rotated 30", y_train[k])
-                            plt.imshow(x_train[k])
-                            plt.show()
+                            # print("Rotated 30", y_train[k])
+                            # plt.imshow(x_train[k])
+                            # plt.show()
 
 
                         elif rn == 3:
@@ -159,18 +162,18 @@ def augment (x_train, y_train, f):
                             rows, cols = x_train[k].shape[:2]
                             M = np.float32([[1, 0, -5], [0, 1, -5]])
                             x_train[k] = cv2.warpAffine(x_train[k], M, (cols, rows))
-                            print("Shifted", y_train[k])
-                            plt.imshow(x_train[k])
-                            plt.show()
+                            # print("Shifted", y_train[k])
+                            # plt.imshow(x_train[k])
+                            # plt.show()
 
 
                         elif rn == 4:
                             rows, cols = x_train[k].shape[:2]
                             M = cv2.getRotationMatrix2D((cols / 2, rows / 2), 180, 1)
                             x_train[k] = cv2.warpAffine(x_train[k], M, (cols, rows))
-                            print("Rotated 180", y_train[k])
-                            plt.imshow(x_train[k])
-                            plt.show()
+                            # print("Rotated 180", y_train[k])
+                            # plt.imshow(x_train[k])
+                            # plt.show()
 
                         # elif rn == 5:
                         #     x_train[k]= cv2.Canny(x_train[k], 200, 600)
@@ -185,9 +188,9 @@ def augment (x_train, y_train, f):
                         #     plt.show()
 
                         x_train_new.append(x_train[k])
-                        print("New image saved as:", y_train[k])
+                        # print("New image saved as:", y_train[k])
                         y_train_new.append(y_train[k])
-                        print("Labeled as:", y_train[k])
+                        # print("Labeled as:", y_train[k])
                         count[y_train[k]] += 1
                         print("-" * 50)
 
@@ -207,39 +210,22 @@ def augment (x_train, y_train, f):
 
 
 cwd = os.getcwd()
-# image = cv2.imread(cwd + "/dataNorm/Marked/Normal_marked (1).jpg")
 
 #Preprocessing
 print("Starting images and label pre-processing...")
 label_data_no_preprocess = []
 images_data_no_preprocess = []
-
-label_data_no_preprocess_cropped = []
 images_data_no_preprocess_cropped = []
-
-label_data_edge_detect = []
 images_data_edge_detect = []
-
-label_data_fir_filter = []
 images_data_fir_filter = []
-
-label_data_feature_creation = []
 images_data_feature_creation = []
-
-label_data_threshold = []
-images_data_threshold = []
-
-label_data_threshold_cropped = []
-images_data_threshold_cropped = []
-
-label_data_contour_filled = []
-images_data_contour_filled = []
-
-label_data_contour_filled_cropped = []
-images_data_contour_filled_cropped = []
-
 images_data_feature_creation_cropped = []
+images_data_threshold = []
+images_data_threshold_cropped = []
+images_data_contour_filled = []
+images_data_contour_filled_cropped = []
 label_data_feature_creation_cropped = []
+
 
 for subdir, dirs, files in os.walk(cwd):
     for file in files:
@@ -270,7 +256,7 @@ for subdir, dirs, files in os.walk(cwd):
             # inverts color scheme (black = white) based on a threshold
             # the second parameter (first number after img_resized) is the threshold value
             # any pixel above that value will be black, anything below will be white
-            ret, img_threshold = cv2.threshold(img_resized, 50, 255, cv2.THRESH_BINARY_INV)
+            ret, img_threshold = cv2.threshold(img_resized, 30, 255, cv2.THRESH_BINARY_INV)
 
             # PREPROCESSING: contour filled
             # need to do binary inverse threshold first
@@ -325,7 +311,7 @@ for subdir, dirs, files in os.walk(cwd):
             img_no_preprocess_cropped = img_resized_cropped
 
             # PREPROCESSING: threshold cropped
-            ret, img_threshold_cropped = cv2.threshold(img_resized_cropped, 50, 255, cv2.THRESH_BINARY_INV)
+            ret, img_threshold_cropped = cv2.threshold(img_resized_cropped, 30, 255, cv2.THRESH_BINARY_INV)
 
             # PREPROCESSING: contour filled cropped
             # need to do binary inverse threshold first
@@ -384,15 +370,6 @@ for subdir, dirs, files in os.walk(cwd):
             label = (label.split("/")[0])
 
             label_data_no_preprocess.append(label)
-            label_data_edge_detect.append(label)
-            # label_data_fir_filter.append(img_fir_filter)
-            label_data_feature_creation.append(label)
-            label_data_threshold.append(label)
-            label_data_contour_filled.append(label)
-            label_data_no_preprocess_cropped.append(label)
-            label_data_threshold_cropped.append(label)
-            images_data_contour_filled_cropped.append(label)
-            label_data_feature_creation_cropped.append(label)
 
 print("-"*50)
 
@@ -441,7 +418,7 @@ y_test_ex = 0;
 #types = [images_data_no_preprocess, images_data_edge_detect, images_data_feature_creation, images_data_threshold,
          #images_data_contour_filled, images_data_feature_creation_cropped, images_data_no_preprocess_cropped,
          #images_data_threshold_cropped]
-types = [images_data_no_preprocess, images_data_threshold, images_data_edge_detect, images_data_no_preprocess_cropped, images_data_threshold_cropped, images_data_edge_detect]
+types = [images_data_no_preprocess, images_data_threshold, images_data_edge_detect, images_data_no_preprocess_cropped, images_data_threshold_cropped, images_data_feature_creation, images_data_feature_creation_cropped]
 
 for i in types:
     x = i
@@ -451,8 +428,9 @@ for i in types:
     y_test_ex = y_test
 
     # Data Augmentation
-    augment(x_train, y_train, 90)
-    print("Data augmentation completed.")
+    if len(i.shape) > 2:
+        augment(x_train, y_train, 90)
+        print("Data augmentation completed.")
 
     # Preprocessing: reshape the image data into rows
     x_train = np.reshape(x_train, (x_train.shape[0], -1))
@@ -468,181 +446,176 @@ for i in types:
     x_train = sc_X.fit_transform(x_train)
     x_test = sc_X.transform(x_test)
 
-    for i in range(0,3):
-        if i == 1:
-            # Create a svm Classifier
-            from sklearn.svm import NuSVC
+    # Create a svm Classifier
+    from sklearn.svm import NuSVC
 
-            # clf = svm.LinearSVC(multi_class="ovr")
-            clf_svm = svm.NuSVC(kernel="linear")
+    # clf = svm.LinearSVC(multi_class="ovr")
+    clf_svm = svm.NuSVC(kernel="linear")
 
-            # Train the model using the training sets
-            clf_svm.fit(x_train, y_train)
+    # Train the model using the training sets
+    clf_svm.fit(x_train, y_train)
 
-            # Predict the response for test dataset
-            y_pred = clf_svm.predict(x_test)
-            voting_array.append(y_pred)
-            print("-" * 80)
-            print("-" * 80)
-            print("Model Results")
-            print("-" * 80)
-            print("-" * 80)
+    # Predict the response for test dataset
+    y_pred = clf_svm.predict(x_test)
+    voting_array.append(y_pred)
+    print("-" * 80)
+    print("-" * 80)
+    print("Model Results")
+    print("-" * 80)
+    print("-" * 80)
 
-            # Model Accuracy: how often is the classifier correct?
-            print("Accuracy SVM:", round(metrics.accuracy_score(y_test, y_pred), 3))
-            print("-" * 50)
-            # Confusion Matrix
-            print("Confusion Matrix SVM:")
-            cmx_SVM = confusion_matrix(y_test, y_pred)
-            print(cmx_SVM)
-            print("-" * 50)
-            print("Classification Report SVM:")
-            cfrp = classification_report(y_test, y_pred)
-            print(cfrp)
-            print("-" * 50)
+    # Model Accuracy: how often is the classifier correct?
+    print("Accuracy SVM:", round(metrics.accuracy_score(y_test, y_pred), 3))
+    print("-" * 50)
+    # Confusion Matrix
+    print("Confusion Matrix SVM:")
+    cmx_SVM = confusion_matrix(y_test, y_pred)
+    print(cmx_SVM)
+    print("-" * 50)
+    print("Classification Report SVM:")
+    cfrp = classification_report(y_test, y_pred)
+    print(cfrp)
+    print("-" * 50)
 
-            class_names = np.unique(label_data)
+    class_names = np.unique(label_data)
 
-            df_cm = pd.DataFrame(cmx_SVM, index=class_names, columns=class_names)
-            plt.figure(figsize=(6, 6))
-            hm = sns.heatmap(df_cm, cmap="Blues", cbar=False, annot=True, square=True, fmt='d', annot_kws={'size': 20},
-                             yticklabels=df_cm.columns, xticklabels=df_cm.columns)
-            hm.yaxis.set_ticklabels(hm.yaxis.get_ticklabels(), rotation=0, ha='right', fontsize=10)
-            hm.xaxis.set_ticklabels(hm.xaxis.get_ticklabels(), rotation=0, ha='right', fontsize=10)
-            plt.ylabel('True label', fontsize=15)
-            plt.xlabel('Predicted label', fontsize=15)
-            # Show heat map
-            plt.tight_layout()
-            plt.show()
+    df_cm = pd.DataFrame(cmx_SVM, index=class_names, columns=class_names)
+    plt.figure(figsize=(6, 6))
+    hm = sns.heatmap(df_cm, cmap="Blues", cbar=False, annot=True, square=True, fmt='d', annot_kws={'size': 20},
+                     yticklabels=df_cm.columns, xticklabels=df_cm.columns)
+    hm.yaxis.set_ticklabels(hm.yaxis.get_ticklabels(), rotation=0, ha='right', fontsize=10)
+    hm.xaxis.set_ticklabels(hm.xaxis.get_ticklabels(), rotation=0, ha='right', fontsize=10)
+    plt.ylabel('True label', fontsize=15)
+    plt.xlabel('Predicted label', fontsize=15)
+    # Show heat map
+    plt.tight_layout()
+    plt.show()
 
-            # Cross Validation Score
-            # from sklearn.model_selection import cross_val_score
-            # print("-" * 50)
-            # print("Cross Validation Score")
-            # accuracies = cross_val_score(estimator=svm.NuSVC(kernel="linear"), X=x_train, y=y_train, cv=10)
-            # print(accuracies)
-            # print("Mean of Accuracies")
-            # print(accuracies.mean())
-            # print("STD of Accuracies")
-            # print(accuracies.std())
+    # Cross Validation Score
+    # from sklearn.model_selection import cross_val_score
+    # print("-" * 50)
+    # print("Cross Validation Score")
+    # accuracies = cross_val_score(estimator=svm.NuSVC(kernel="linear"), X=x_train, y=y_train, cv=10)
+    # print(accuracies)
+    # print("Mean of Accuracies")
+    # print(accuracies.mean())
+    # print("STD of Accuracies")
+    # print(accuracies.std())
 
-            print("-" * 80)
-            print("-" * 80)
+    print("-" * 80)
+    print("-" * 80)
 
-        if i == 1:
-            # Decision tree with entropy
-            clf_dt = DecisionTreeClassifier(criterion="entropy", random_state=100, max_depth=20, min_samples_leaf=5)
-            # Performing training
-            clf_dt.fit(x_train, y_train)
-            X_combined = np.vstack((x_train, x_test))
-            y_combined = np.hstack((y_train, y_test))
+    # Decision tree with entropy
+    clf_dt = DecisionTreeClassifier(criterion="entropy", random_state=100, max_depth=20, min_samples_leaf=5)
+    # Performing training
+    clf_dt.fit(x_train, y_train)
+    X_combined = np.vstack((x_train, x_test))
+    y_combined = np.hstack((y_train, y_test))
 
-            # prediction on test using entropy
-            y_pred_dt = clf_dt.predict(x_test)
-            voting_array.append(y_pred_dt)
+    # prediction on test using entropy
+    y_pred_dt = clf_dt.predict(x_test)
+    voting_array.append(y_pred_dt)
 
-            # calculate metrics entropy model
-            print("Model Accuracy Tree: ", accuracy_score(y_test, y_pred_dt) * 100)
-            print('-' * 50)
+    # calculate metrics entropy model
+    print("Model Accuracy Tree: ", accuracy_score(y_test, y_pred_dt) * 100)
+    print('-' * 50)
 
-            # confusion matrix for entropy model
-            conf_matrix_dt = confusion_matrix(y_test, y_pred_dt)
-            print("Confusion Matrix Tree:")
-            print(conf_matrix_dt)
+    # confusion matrix for entropy model
+    conf_matrix_dt = confusion_matrix(y_test, y_pred_dt)
+    print("Confusion Matrix Tree:")
+    print(conf_matrix_dt)
 
-            #Clasification report Tree
-            print("Classification Report Tree: ")
-            print(classification_report(y_test, y_pred_dt))
-            print('-' * 50)
+    #Clasification report Tree
+    print("Classification Report Tree: ")
+    print(classification_report(y_test, y_pred_dt))
+    print('-' * 50)
 
-            class_names = np.unique(label_data)
+    class_names = np.unique(label_data)
 
-            df_dt = pd.DataFrame(conf_matrix_dt, index=class_names, columns=class_names)
-            plt.figure(figsize=(6, 6))
-            hm = sns.heatmap(df_dt, cmap="Blues", cbar=False, annot=True, square=True, fmt='d', annot_kws={'size': 20},
-                             yticklabels=df_dt.columns, xticklabels=df_dt.columns)
-            hm.yaxis.set_ticklabels(hm.yaxis.get_ticklabels(), rotation=0, ha='right', fontsize=10)
-            hm.xaxis.set_ticklabels(hm.xaxis.get_ticklabels(), rotation=0, ha='right', fontsize=10)
-            plt.ylabel('True label', fontsize=15)
-            plt.xlabel('Predicted label', fontsize=15)
-            # Show heat map
-            plt.tight_layout()
-            plt.show()
+    df_dt = pd.DataFrame(conf_matrix_dt, index=class_names, columns=class_names)
+    plt.figure(figsize=(6, 6))
+    hm = sns.heatmap(df_dt, cmap="Blues", cbar=False, annot=True, square=True, fmt='d', annot_kws={'size': 20},
+                     yticklabels=df_dt.columns, xticklabels=df_dt.columns)
+    hm.yaxis.set_ticklabels(hm.yaxis.get_ticklabels(), rotation=0, ha='right', fontsize=10)
+    hm.xaxis.set_ticklabels(hm.xaxis.get_ticklabels(), rotation=0, ha='right', fontsize=10)
+    plt.ylabel('True label', fontsize=15)
+    plt.xlabel('Predicted label', fontsize=15)
+    # Show heat map
+    plt.tight_layout()
+    plt.show()
 
-            print("-" * 80)
-            print("-" * 80)
+    print("-" * 80)
+    print("-" * 80)
 
 
-        if i == 2:
 
-            # Perform KNN of X variables
-            knn = KNeighborsClassifier(n_neighbors=7)  # Standard Euclidean distance metric
+    # Perform KNN of X variables
+    knn = KNeighborsClassifier(n_neighbors=7)  # Standard Euclidean distance metric
 
-            knn.fit(x_train, y_train)
+    knn.fit(x_train, y_train)
 
-            y_pred_knn = knn.predict(x_test)
-            voting_array.append(y_pred_knn)
+    y_pred_knn = knn.predict(x_test)
+    voting_array.append(y_pred_knn)
 
-            print("Accuracy KNN: ", accuracy_score(y_test, y_pred_knn) * 100)
-            print('-' * 50)
+    print("Accuracy KNN: ", accuracy_score(y_test, y_pred_knn) * 100)
+    print('-' * 50)
 
-            print("Confusion Matrix KNN:")
-            conf_matrix_knn = confusion_matrix(y_test, y_pred_knn)
-            print(conf_matrix_knn)
-            print('-' * 50)
+    print("Confusion Matrix KNN:")
+    conf_matrix_knn = confusion_matrix(y_test, y_pred_knn)
+    print(conf_matrix_knn)
+    print('-' * 50)
 
-            # Classification Report KNN
-            print("Classification Report: ")
-            print(classification_report(y_test, y_pred_knn))
-            print('-' * 50)
+    # Classification Report KNN
+    print("Classification Report: ")
+    print(classification_report(y_test, y_pred_knn))
+    print('-' * 50)
 
 
-            class_names = np.unique(label_data)
+    class_names = np.unique(label_data)
 
-            df_knn = pd.DataFrame(conf_matrix_knn, index=class_names, columns=class_names)
-            plt.figure(figsize=(6, 6))
-            hm = sns.heatmap(df_knn, cmap="Blues", cbar=False, annot=True, square=True, fmt='d', annot_kws={'size': 20},
-                             yticklabels=df_knn.columns, xticklabels=df_knn.columns)
-            hm.yaxis.set_ticklabels(hm.yaxis.get_ticklabels(), rotation=0, ha='right', fontsize=10)
-            hm.xaxis.set_ticklabels(hm.xaxis.get_ticklabels(), rotation=0, ha='right', fontsize=10)
-            plt.ylabel('True label', fontsize=15)
-            plt.xlabel('Predicted label', fontsize=15)
-            # Show heat map
-            plt.tight_layout()
-            plt.show()
+    df_knn = pd.DataFrame(conf_matrix_knn, index=class_names, columns=class_names)
+    plt.figure(figsize=(6, 6))
+    hm = sns.heatmap(df_knn, cmap="Blues", cbar=False, annot=True, square=True, fmt='d', annot_kws={'size': 20},
+                     yticklabels=df_knn.columns, xticklabels=df_knn.columns)
+    hm.yaxis.set_ticklabels(hm.yaxis.get_ticklabels(), rotation=0, ha='right', fontsize=10)
+    hm.xaxis.set_ticklabels(hm.xaxis.get_ticklabels(), rotation=0, ha='right', fontsize=10)
+    plt.ylabel('True label', fontsize=15)
+    plt.xlabel('Predicted label', fontsize=15)
+    # Show heat map
+    plt.tight_layout()
+    plt.show()
 
-            from sklearn.neighbors import kneighbors_graph
+    from sklearn.neighbors import kneighbors_graph
 
-            # A = kneighbors_graph(x_train, 2, mode='connectivity', include_self=True)
-            # print(A)
+    # A = kneighbors_graph(x_train, 2, mode='connectivity', include_self=True)
+    # print(A)
 
-            from sklearn.model_selection import cross_val_score
+    from sklearn.model_selection import cross_val_score
 
-            # # create a new KNN model
-            # knn_cv = KNeighborsClassifier(n_neighbors=3)
-            # # train model with cv of 5
-            # cv_scores = cross_val_score(knn_cv, x_train, y_train, cv=5)
-            # # print each cv score (accuracy) and average them
-            # print(cv_scores)
-            # print("cv_scores mean:{}".format(np.mean(cv_scores)))
+    # # create a new KNN model
+    # knn_cv = KNeighborsClassifier(n_neighbors=3)
+    # # train model with cv of 5
+    # cv_scores = cross_val_score(knn_cv, x_train, y_train, cv=5)
+    # # print each cv score (accuracy) and average them
+    # print(cv_scores)
+    # print("cv_scores mean:{}".format(np.mean(cv_scores)))
 
-            from sklearn.model_selection import GridSearchCV
+    from sklearn.model_selection import GridSearchCV
 
-            # # create new a knn model
-            # knn2 = KNeighborsClassifier()
-            # # create a dictionary of all values we want to test for n_neighbors
-            # param_grid = {"n_neighbors": np.arange(1, 25)}
-            # # use gridsearch to test all values for n_neighbors
-            # knn_gscv = GridSearchCV(knn2, param_grid, cv=5)
-            # # fit model to data
-            # knn_gscv.fit(x_train, y_train)
-            #
-            # # check top performing n_neighbors value
-            # print(knn_gscv.best_params_)
-            print('-' * 80)
-            print('-' * 80)
-            print('-' * 80 + '\n')
-
+    # # create new a knn model
+    # knn2 = KNeighborsClassifier()
+    # # create a dictionary of all values we want to test for n_neighbors
+    # param_grid = {"n_neighbors": np.arange(1, 25)}
+    # # use gridsearch to test all values for n_neighbors
+    # knn_gscv = GridSearchCV(knn2, param_grid, cv=5)
+    # # fit model to data
+    # knn_gscv.fit(x_train, y_train)
+    #
+    # # check top performing n_neighbors value
+    # print(knn_gscv.best_params_)
+    print('-' * 80)
+    print('-' * 80)
+    print('-' * 80 + '\n')
 
 # print(voting_array)
 final_pred = np.array([])
@@ -653,13 +626,11 @@ final_pred = np.append(final_pred, mode(voting_array))
 # print(final_pred)
 #print(final_pred[0:60])
 #print(final_pred[0:61])
-print("Accuracy Voting: ", accuracy_score(y_test_ex, final_pred[0:60]) * 100)
+print("Accuracy Voting: ", accuracy_score(y_test_ex, final_pred[0:61]) * 100)
 print('-' * 50)
 print("Confusion Matrix Voting:")
-cmx = confusion_matrix(y_test_ex, final_pred[0:60])
+cmx = confusion_matrix(y_test_ex, final_pred[0:61])
 print(cmx)
-
-
 
 
 
