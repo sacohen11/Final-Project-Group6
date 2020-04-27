@@ -382,7 +382,7 @@ for i in types:
 
     # Data Augmentation
     if len(i.shape) > 2:
-        augment(x_train, y_train, 90)
+        augment(x_train, y_train, 87)
         print("Data augmentation completed.")
 
     # Preprocessing: reshape the image data into rows
@@ -402,8 +402,9 @@ for i in types:
     # Create a svm Classifier
     from sklearn.svm import NuSVC
 
-    # clf = svm.LinearSVC(multi_class="ovr")
     clf_svm = svm.NuSVC(kernel="linear")
+    # clf_svm = svm.LinearSVC(multi_class='crammer_singer')
+    # clf_svm = svm.LinearSVC(multi_class="ovr")
 
     # Train the model using the training sets
     clf_svm.fit(x_train, y_train)
@@ -456,7 +457,7 @@ for i in types:
     print("-" * 80)
 
     # Decision tree with entropy
-    clf_dt = DecisionTreeClassifier(criterion="entropy", random_state=100, max_depth=20, min_samples_leaf=5)
+    clf_dt = DecisionTreeClassifier(criterion="entropy", random_state=100, max_depth=80, min_samples_leaf=5)
     # Performing training
     clf_dt.fit(x_train, y_train)
     X_combined = np.vstack((x_train, x_test))
@@ -499,7 +500,7 @@ for i in types:
 
 
     # Perform KNN of X variables
-    knn = KNeighborsClassifier(n_neighbors=17)  # Standard Euclidean distance metric
+    knn = KNeighborsClassifier(n_neighbors=25)  # Standard Euclidean distance metric
 
     knn.fit(x_train, y_train)
 
@@ -580,6 +581,9 @@ print("Confusion Matrix Voting:")
 cmx = confusion_matrix(y_test_ex, final_pred[0:61])
 print(cmx)
 
+# for i in range(len(voting_array)):
+#     print(namestr(types[i], globals())[0])
+#     print(voting_array[i])
 
 
 #Source: https://www.datacamp.com/community/tutorials/svm-classification-scikit-learn-python
