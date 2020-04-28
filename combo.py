@@ -363,7 +363,7 @@ for subdir, dirs, files in os.walk(cwd):
                 images_data_threshold_cropped.append(img_threshold_cropped)
 
                 # Labels preprocessing
-                label = (subdir.split("eye-miner/")[1])
+                label = (subdir.split("Final-Project-Group6/")[1])
                 label = (label.split("/")[0])
                 label_data.append(label)
 
