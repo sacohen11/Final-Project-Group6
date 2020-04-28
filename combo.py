@@ -4,11 +4,8 @@ DM Project: Rich Gude, Sam Cohen, Luis Ahumada
 
 import numpy as np
 from sklearn import preprocessing
-from skimage.transform import rotate
-from skimage.color import rgb2grey
 import matplotlib.pyplot as plt
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import accuracy_score
 import cv2
 import os
 import random
@@ -16,11 +13,10 @@ import warnings
 from sklearn.model_selection import train_test_split
 from sklearn import svm
 from sklearn import metrics
-from sklearn.metrics import classification_report,confusion_matrix
+from sklearn.metrics import confusion_matrix
 import pandas as pd
 import seaborn as sns
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.neighbors import NearestNeighbors
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import classification_report
 warnings.filterwarnings("ignore")
@@ -30,6 +26,12 @@ warnings.filterwarnings("ignore")
 #::------------------------------------------------------------------------------------
 
 def mode(array):
+    '''
+        Calculates the mode prediction for each image.
+        Searches through each model's predictions and finds the most commmon classification.
+        Returns an array of predictions.
+        Source: https://www.analyticsvidhya.com/blog/2018/06/comprehensive-guide-for-ensemble-models/
+        '''
     output_array = []
     length_array = len(array)
     for i in range(0,len(array[0])):
@@ -62,9 +64,10 @@ def mode(array):
                 output_array.append(random.randint(0,2))
             elif maximum == count1 & maximum == count2:
                 output_array.append(random.randint(1, 2))
-            else:
+            elif maximum == count0 & maximum == count2:
                 output_array.append(random.randrange(0, 2, 2))
-                #output_array.append(2)
+            else:
+                output_array.append(random.randint(0, 2))
         else:
             output_array.append(return_value)
     return output_array
@@ -239,6 +242,56 @@ def namestr(obj, namespace):
     '''
     return [name for name in namespace if namespace[name] is obj]
 
+def no_transformation(img):
+    '''
+        Returns the original image.
+        '''
+    return img
+
+def edge_detection(img):
+    '''
+        Performs a Canny Edge Detection Algorithm.
+        Returns an image with only the major edges included.
+        More information here: https://docs.opencv.org/2.4/doc/tutorials/imgproc/imgtrans/canny_detector/canny_detector.html
+                '''
+    return cv2.Canny(img, 200, 600)
+
+def feature_creation(img):
+    '''
+        Performs the KAZE feature detection algorithm.
+        This algorithm finds the keypoints/features of the image.
+        A vector of keypoints is returned.
+        Source: https://medium.com/machine-learning-world/feature-extraction-and-similar-image-search-with-opencv-for-newbies-3c59796bf774
+            '''
+    creator = cv2.KAZE_create()
+    # detect
+    kps = creator.detect(img)
+    vector_size = 32
+    kps = sorted(kps, key=lambda x: -x.response)[:vector_size]
+    # computing descriptors vector
+    kps, img_feature_creation = creator.compute(img, kps)
+    # Flatten all of them in one big vector - our feature vector
+    img_feature_creation = img_feature_creation.flatten()
+    # Making descriptor of same size
+    # Descriptor vector size is 64
+    needed_size = (vector_size * 64)
+    if img_feature_creation.size < needed_size:
+        # if we have less the 32 descriptors then just adding zeros at the
+        # end of our feature vector
+        img_feature_creation = np.concatenate(
+            [img_feature_creation, np.zeros(needed_size - img_feature_creation.size)])
+    return img_feature_creation
+
+def threshold(img):
+    '''
+        Inverts color scheme (black = white) based on a threshold.
+        The second parameter (first number after img) is the threshold value.
+        Any pixel above that value will be black, anything below will be white.
+        Returns a black and white image.
+            '''
+    ret, img_threshold = cv2.threshold(img, 30, 255, cv2.THRESH_BINARY_INV)
+    return img_threshold
+
 #::------------------------------------------------------------------------------------
 ##PREPROCESSING
 #::------------------------------------------------------------------------------------
@@ -246,7 +299,9 @@ def namestr(obj, namespace):
 cwd = os.getcwd()
 
 print("Starting images and label pre-processing...")
-label_data_no_preprocess = []
+
+# create empty arrays
+label_data = []
 images_data_no_preprocess = []
 images_data_no_preprocess_cropped = []
 images_data_edge_detect = []
@@ -254,7 +309,6 @@ images_data_feature_creation = []
 images_data_feature_creation_cropped = []
 images_data_threshold = []
 images_data_threshold_cropped = []
-label_data_feature_creation_cropped = []
 
 for subdir, dirs, files in os.walk(cwd):
     for file in files:
@@ -263,102 +317,55 @@ for subdir, dirs, files in os.walk(cwd):
             image_path = os.path.join(subdir, file)
             # read in image in grayscale
             img = cv2.imread(image_path, 0)
-            # crop out the bottom of the image
             try:
-                height, width = img.shape
+                # crop out the bottom of the image
+                # create two resized images: one original, one zoomed
 
+                # original image
+                height, width = img.shape
                 img = img[0:width, 0:width]
-                # resize the image
+
+                # zoomed/cropped image
+                img_cropped = img[150:300, 100:300]
+
+                # resize both images
                 img_resized = image_resize(img, height=400)
+                img_resized_cropped = image_resize(img_cropped, height=400)
 
                 # PREPROCESSING: No transformation
-                # do nothing but change name
-                img_no_preprocess = img_resized
-
-                # PREPROCESSING: edge detect
-                # find the edges
-                # 200, 600 are parameters
-                # has to do with the pixel value
-                # more information here: https://docs.opencv.org/2.4/doc/tutorials/imgproc/imgtrans/canny_detector/canny_detector.html
-                # we can add more combinations of different numbers and ensemble them
-                img_edge_detect = cv2.Canny(img_resized, 200, 600)
-
-                # PREPROCESSING: threshold
-                # inverts color scheme (black = white) based on a threshold
-                # the second parameter (first number after img_resized) is the threshold value
-                # any pixel above that value will be black, anything below will be white
-                ret, img_threshold = cv2.threshold(img_resized, 30, 255, cv2.THRESH_BINARY_INV)
-
-
-                # PREPROCESSING: feature creation
-                # I took this function from the below website
-                # https://medium.com/machine-learning-world/feature-extraction-and-similar-image-search-with-opencv-for-newbies-3c59796bf774
-                creator = cv2.KAZE_create()
-                # detect
-                kps = creator.detect(img_resized)
-                vector_size = 32
-                kps = sorted(kps, key=lambda x: -x.response)[:vector_size]
-                # computing descriptors vector
-                kps, img_feature_creation = creator.compute(img_resized, kps)
-                # Flatten all of them in one big vector - our feature vector
-                img_feature_creation = img_feature_creation.flatten()
-                # Making descriptor of same size
-                # Descriptor vector size is 64
-                needed_size = (vector_size * 64)
-                if img_feature_creation.size < needed_size:
-                    # if we have less the 32 descriptors then just adding zeros at the
-                    # end of our feature vector
-                    img_feature_creation = np.concatenate(
-                        [img_feature_creation, np.zeros(needed_size - img_feature_creation.size)])
-
-                # CROPPED
-                # crop image
-                img_cropped = img[150:300, 100:300]
-                # resize the cropped image
-                img_resized_cropped = cv2.resize(img_cropped, (400, 400))
+                img_no_preprocess = no_transformation(img_resized)
 
                 # PREPROCESSING: no preprocess cropped
-                img_no_preprocess_cropped = img_resized_cropped
+                img_no_preprocess_cropped = no_transformation(img_resized_cropped)
 
-                # PREPROCESSING: threshold cropped
-                ret, img_threshold_cropped = cv2.threshold(img_resized_cropped, 30, 255, cv2.THRESH_BINARY_INV)
+                # PREPROCESSING: edge detect
+                img_edge_detect = edge_detection(img_resized)
 
+                # PREPROCESSING: feature creation
+                img_feature_creation = feature_creation(img_resized)
 
                 # PREPROCESSING: feature creation cropped
-                # I took this function from the below website
-                # https://medium.com/machine-learning-world/feature-extraction-and-similar-image-search-with-opencv-for-newbies-3c59796bf774
-                creator_cropped = cv2.KAZE_create()
-                # detect
-                kps_cropped = creator_cropped.detect(img_resized_cropped)
-                vector_size = 32
-                kps_cropped = sorted(kps_cropped, key=lambda x: -x.response)[:vector_size]
-                # computing descriptors vector
-                kps_cropped, img_feature_creation_cropped = creator_cropped.compute(img_resized_cropped, kps_cropped)
-                # Flatten all of them in one big vector - our feature vector
-                img_feature_creation_cropped = img_feature_creation_cropped.flatten()
-                # Making descriptor of same size
-                # Descriptor vector size is 64
-                needed_size = (vector_size * 64)
-                if img_feature_creation_cropped.size < needed_size:
-                    # if we have less the 32 descriptors then just adding zeros at the
-                    # end of our feature vector
-                    img_feature_creation_cropped = np.concatenate(
-                        [img_feature_creation_cropped, np.zeros(needed_size - img_feature_creation_cropped.size)])
+                img_feature_creation_cropped = feature_creation(img_resized_cropped)
+
+                # PREPROCESSING: threshold
+                img_threshold = threshold(img_resized)
+
+                # PREPROCESSING: threshold cropped
+                img_threshold_cropped = threshold(img_resized_cropped)
 
                 # APPENDING IMAGES TO ARRAYS
                 images_data_no_preprocess.append(img_no_preprocess)
+                images_data_no_preprocess_cropped.append(img_no_preprocess_cropped)
                 images_data_edge_detect.append(img_edge_detect)
                 images_data_feature_creation.append(img_feature_creation)
-                images_data_threshold.append(img_threshold)
-                images_data_no_preprocess_cropped.append(img_no_preprocess_cropped)
-                images_data_threshold_cropped.append(img_threshold_cropped)
                 images_data_feature_creation_cropped.append(img_feature_creation_cropped)
+                images_data_threshold.append(img_threshold)
+                images_data_threshold_cropped.append(img_threshold_cropped)
 
                 # Labels preprocessing
                 label = (subdir.split("eye-miner/")[1])
                 label = (label.split("/")[0])
-
-                label_data_no_preprocess.append(label)
+                label_data.append(label)
 
             except AttributeError:
                 print("shape not found")
@@ -366,8 +373,9 @@ for subdir, dirs, files in os.walk(cwd):
                 print("object is not subscriptable")
 
 print("-"*50)
+
 # look at labels and images shape
-label_data = np.array(label_data_no_preprocess)
+label_data = np.array(label_data)
 print("Labels shape:", label_data.shape)
 no_preprocess = np.array(images_data_no_preprocess)
 print("Images No Transformation shape:", no_preprocess.shape)
@@ -413,6 +421,7 @@ for i in types:
     y_test_ex = y_test
 
     # Data Augmentation
+    # only complete data augmentation if it is an image (no feature creation)
     if len(i.shape) > 2:
         augment(x_train, y_train, 87)
         print("Data augmentation completed.")
@@ -481,6 +490,7 @@ for i in types:
 
     print("-" * 80)
 
+    # Source: https://www.datacamp.com/community/tutorials/svm-classification-scikit-learn-python
     #::------------------------------------------------------------------------------------
     #DecisionTree
     #::------------------------------------------------------------------------------------
@@ -599,6 +609,7 @@ for i in types:
 ##Accuracy Voting
 
 final_pred = np.array([])
+# call the mode function to determine the mode of each images predictions
 final_pred = np.append(final_pred, mode(voting_array))
 
 print("Accuracy Voting: ", accuracy_score(y_test_ex, final_pred[0:61]) * 100)
@@ -617,6 +628,3 @@ plt.xlabel('Predicted label', fontsize=15)
 plt.title("Accuracy Voting")
 # Show heat map
 plt.show()
-
-
-#Source: https://www.datacamp.com/community/tutorials/svm-classification-scikit-learn-python
