@@ -507,7 +507,7 @@ class SVMtestWindow(QMainWindow):
 
         # if checkbox for data augmentation is checked, perform accordingly
         if (self.chkDAug.isChecked() and len(x.shape) > 2):
-            x_train, y_train = augment(x_train, y_train, 90)
+            x_train, y_train = augment(x_train, y_train, 87)
             self.length = str(x_train.shape[0])
             self.chkLabel.setText('Training data size: ' + self.length)
 
@@ -539,7 +539,7 @@ class SVMtestWindow(QMainWindow):
 
             # Create a heatmap
             class_names = np.unique(label_data)
-            self.ax2.imshow(cmx_SVM, cmap='jet')
+            self.ax2.imshow(cmx_SVM, cmap='Blues')
             self.ax2.set_xticks(np.arange(len(class_names)))
             self.ax2.set_yticks(np.arange(len(class_names)))
             # Label X and Y axes
@@ -756,7 +756,7 @@ class KNNtestWindow(QMainWindow):
 
         # if checkbox for data augmentation is checked, perform accordingly
         if (self.chkDAug.isChecked() and len(x.shape) > 2):
-            x_train, y_train = augment(x_train, y_train, 90)
+            x_train, y_train = augment(x_train, y_train, 87)
             self.length = str(x_train.shape[0])
             self.chkLabel.setText('Training data size: ' + self.length)
 
@@ -788,7 +788,7 @@ class KNNtestWindow(QMainWindow):
 
             # Create a heatmap
             class_names = np.unique(label_data)
-            self.ax2.imshow(conf_matrix_knn, cmap='jet')
+            self.ax2.imshow(conf_matrix_knn, cmap='Blues')
             self.ax2.set_xticks(np.arange(len(class_names)))
             self.ax2.set_yticks(np.arange(len(class_names)))
             # Label X and Y axes
@@ -1003,7 +1003,7 @@ class DECtestWindow(QMainWindow):
 
         # if checkbox for data augmentation is checked, perform accordingly
         if (self.chkDAug.isChecked() and len(x.shape) > 2):
-            x_train, y_train = augment(x_train, y_train, 90)
+            x_train, y_train = augment(x_train, y_train, 87)
             self.length = str(x_train.shape[0])
             self.chkLabel.setText('Training data size: ' + self.length)
 
@@ -1037,7 +1037,7 @@ class DECtestWindow(QMainWindow):
 
             # Create a heatmap
             class_names = np.unique(label_data)
-            self.ax2.imshow(conf_matrix_dt, cmap='jet')
+            self.ax2.imshow(conf_matrix_dt, cmap='Blues')
             self.ax2.set_xticks(np.arange(len(class_names)))
             self.ax2.set_yticks(np.arange(len(class_names)))
             # Label X and Y axes
