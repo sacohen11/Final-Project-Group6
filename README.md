@@ -1,29 +1,39 @@
-# eye-miner
+# Group 6: Eye-Miner
 
-Project Plan
-1. Initial Preprocess of Data
-	Consider if PIL is correct for Images
-		if yes, crop and change to change data for testing and convert to DataFrame and include classification (D, M, N)
-	Need Single DF with one feature for classification (y-var)
-	Split test-train
-2. Run Tests
-	Identify Accuracy of tests
-	2a. OPTIONAL: Additional Preprocessin of Data to Improve Accuracy
-		Add constrast to images, rotating images, etc
-3. Identify Conclusions
-	Compare three tests (DecTree, SVM, and KNN) accuracy with constant processing time (import clock)
-	Report Results
+Here is the structure of the Repository:
 
-Tasking: (FINAL PROJECT 4/21)
-INDIVIDUALLY (Each participant will:)
-1. Initial Processing of the Data
-2. Perform One Test Each
-	SVM:		Luis
-	DecTree:	Sam
-	KNN:		Rich
-3. Make Model Program
+1). Folders Diabetic, Myopia, Normals
+	- These folders are where the data resides
+	- Each folder has "Clear" and "Marked" images
+	
+2). PyQT_SLR.py
+	- This folder contains our demo
+	- Reads in data, performs pre-processing, runs SVM, KNN, and Decision Tree models, performs data augmentation, and displays the images and results in PyQT
+	- The code necessary to run the demo is in the file
+	
+3). enter.png
+	- This file is used by the demo
+	
+4). combo.py
+	- This file contains our full code
+	- Reads in data, performs pre-processing, runs SVM, KNN, and Decision Tree models, performs data augmentation, and runs the ensembled model.
+	- Prints all confusion matrices in PyCharm
+	- The demo file "PyQT_SLR.py" has a toned down version of our code
+	
+5). Group-Proposal
+	- Contains our initial group proposal
+	
+6). Final-Group-Presentation
+	- Contains our final presentation in PDF format
+	
+7). Final-Group-Project-Report
+	- Contains our final report in PDF format
+	
+How to run our code:
 
-Documentation:
-PIL IMAGE documentation: https://pillow.readthedocs.io/en/3.1.x/reference/Image.html
+First, you need to download PyQT5 and OpenCV. If you do not have the OpenCV package on your computer, this link can help you download and troubleshoot (https://stackoverflow.com/questions/60254766/opencv-giving-an-error-whenever-import-cv2-is-used).
 
-OpenCv Installation: https://stackoverflow.com/questions/60254766/opencv-giving-an-error-whenever-import-cv2-is-used	
+Next, if you would like to see the demo only, run "PyQT_SLR.py". The demo contains a pared-down version of our full code, in order to maximize the computing time of the demo.
+
+Lastly, if you would like to run our full code, run "combo.py". It produces the full results of our analysis/modeling.
+
