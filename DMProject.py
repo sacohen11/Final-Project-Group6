@@ -1,3 +1,4 @@
+
 '''
 DM Project: Rich Gude, Sam Cohen, Luis Ahumada
 '''
@@ -420,10 +421,3 @@ print(cmx)
 #                     count += 1
 #             else:
 #                 break
-
-
-
-
-
-
-#Source: https://www.datacamp.com/community/tutorials/svm-classification-scikit-learn-python
