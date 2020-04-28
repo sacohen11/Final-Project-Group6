@@ -1080,6 +1080,44 @@ class Menu(QMainWindow):
         # Create the menu bar
         mainMenu = self.menuBar()
 
+        # First Box is used for Introduction Summary
+        self.groupBoxTitle = QGroupBox('Introduction to Data')
+        self.groupBoxTitleLayout = QVBoxLayout()
+        self.groupBoxTitle.setLayout(self.groupBoxTitleLayout)
+
+        self.introLabel = QLabel("Machine learning algorithms are being used in the medical industry to help doctors "+
+                                 "diagnose diseases, cancers, and more. This project looks at the usefulness of "+
+                                 "applying data mining and machine learning algorithms to diagnose diseases of the "+
+                                 "eye. In the eye, different diseases prompt changes to the size and shape of features"+
+                                 " in the Foveal Avascular Zone (FAZ). This project aims to analyze images of the FAZ "+
+                                 "and classify them into three categories (Diabetes, Myopia, and Normal) based upon "+
+                                 "differences inherent in the image. The goal of this research is to help "+
+                                 "ophthalmologists diagnose diseases visible from the FAZ quicker and more accurately "+
+                                 "than traditional methods.")
+        self.groupBoxTitleLayout.addWidget(self.introLabel)
+
+        # Second Box is used to show instructions for the models
+        self.groupBoxInstr = QGroupBox('Model Descriptions and Instructions')
+        self.groupBoxInstrLayout = QVBoxLayout()
+        self.groupBoxInstr.setLayout(self.groupBoxInstrLayout)
+
+        self.instrLabel = QLabel("The given dataset contains roughly 100 images of each diagnosis (107 Diabetic, "+
+                                 "109 Myopic, and 88 Normal).\n\nThe interactive GUI contains 7 choices for "+
+                                 "pre-processing techniques:\n1. No "+
+                                 "Transformation/Pre-processing\n2. No Pre-processing but Zooming in (Cropping) on the "+
+                                 "Ocular Center\n3. Adjusting Pixel Values based on a Threshold\n4. Value Thresholding with "+
+                                 "Cropping\n5. Selection and Manipulation of Various Image Features\n6. Feature Selection "+
+                                 "with Cropping\n7 Detection of Manipulation of Image Edges\n\nThe user is expected to "+
+                                 "identify an image pre-processong and whether or not they want want to augment the "+
+                                 "given dataset with additional images (via manipulating the current image dataset in "+
+                                 "random ways) in order to train on a dataset with equal amounts of each diagnosis.\n\n"+
+                                 "The effect of the chosen pre-processing step is shown in the second box in the model "+
+                                 "window, and the size of the training dataset (80% of the total dataset - the other 20% "+
+                                 "is used for model testing) is shown in the third box in the model window.\n\n"+
+                                 "To initiate the model and produce an accuracy measument and confusion matrix for the "+
+                                 "model test results, the user must check the test start box in the fourth box.")
+        self.groupBoxInstrLayout.addWidget(self.instrLabel)
+
         # Create an option in the menu bar, mainly to have an exit function
         fileMenu = mainMenu.addMenu('File')
         # Add another option to the menu bar to show different models
