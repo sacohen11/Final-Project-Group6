@@ -20,7 +20,7 @@ if 'dataDia' not in os.listdir():
         ProjObj1.extractall()  # If we provide no arguments, the command will extract from the current folder all files
                           # into the directory.  Since the current folder comes out as a separate folder, 'Diabetic',
                           # this folder with be our data folder.
-    os.rename('Code/Diabetic', 'dataDia')  # rename created folder to 'data' folder
+    os.rename('Diabetic', 'dataDia')  # rename created folder to 'data' folder
 
 diaFiles = os.listdir('dataDia/Clear')
 #print(diaFiles)       # to show csv file names for reference and verify filefolders is drawing correctly
@@ -31,7 +31,7 @@ if 'dataMyo' not in os.listdir():
         ProjObj2.extractall()  # If we provide no arguments, the command will extract from the current folder all files
                           # into the directory.  Since the current folder comes out as a separate folder, 'Myopia',
                           # this folder with be our data folder.
-    os.rename('Code/Myopia', 'dataMyo')  # rename created folder to 'data' folder
+    os.rename('Myopia', 'dataMyo')  # rename created folder to 'data' folder
 
 myoFiles = os.listdir('dataMyo/Clear')
 #print(file_headers)       # to show csv file names for reference and verify filefolders is drawing correctly
@@ -42,7 +42,7 @@ if 'dataNorm' not in os.listdir():
         ProjObj3.extractall()  # If we provide no arguments, the command will extract from the current folder all files
                           # into the directory.  Since the current folder comes out as a separate folder, 'Myopia',
                           # this folder with be our data folder.
-    os.rename('Code/Normals', 'dataNorm')  # rename created folder to 'data' folder
+    os.rename('Normals', 'dataNorm')  # rename created folder to 'data' folder
 
 normFiles = os.listdir('dataNorm/Clear')
 #print(file_headers)       # to show csv file names for reference and verify filefolders is drawing correctly
